@@ -18,12 +18,12 @@ def data_pub():
 		data = Sensor()
 
 		# Define the messages 
-		Sensor.acc_x = 1
-		Sensor.acc_y = 2
-		Sensor.acc_z = 3
+		data.acc_x = 1
+		data.acc_y = 2
+		data.acc_z = 3
 
 		# logging for display
-		rospy.loginfo("sending sensor data %d, %d, %d" %(Sensor.acc_x, Sensor.acc_y, Sensor.acc_z))
+		rospy.loginfo("sending sensor data %d, %d, %d" %(data.acc_x, data.acc_y, data.acc_z))
 
 		# publish data 
 		pub.publish(data)

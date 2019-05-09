@@ -1,6 +1,6 @@
-float32 acc_X
-float32 acc_Y
-float32 acc_Z
-float32 gyro_X
-float32 gyro_Y
-float32 gyro_Z
+float32 acc_x
+float32 acc_y
+float32 acc_z
+float32 gyro_x
+float32 gyro_y
+float32 gyro_z
