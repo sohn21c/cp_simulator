@@ -14,17 +14,20 @@ import math
 from cp_simulator.msg import Sensor
 from sensor_msgs.msg import JointState
 
-# set the conversion constants for the sensor data
-fps = 200
-acc_conv = 8 / 2**16
-gyro_conv = 1000 / 2**16 * np.pi / 180
-
 class Transform(object):
 	def __init__(self):
+		""" 
+		initiate the parameters
+		"""
 		rospy.init_node('transform_data', anonymous=True)
 		self._sensor_sub = rospy.Subscriber('sensor', Sensor, self.data_process)
 		self._br = tf.TransformBroadcaster()
-		self._rate = rospy.Rate(1)
+		self._rate = rospy.Rate(10.0)
+
+		# conversion coefficients for data process
+		self._fps = 200
+		self._acc_conv = 8 / 2**16
+		self._gyro_conv = 1000 / 2**16 * np.pi / 180
 		return
 
 	def data_process(self, data):
@@ -46,17 +49,28 @@ class Transform(object):
 
 		# loginfo to check receiving data
 		rospy.loginfo("Receiving data %f, %f, %f, %f" %(self._acc_x, self._acc_y, self._acc_z, self._gyro_x))
+
+		
+	def tf_broadcast(self):
+		# broadcasting to tf
 		t = rospy.Time.now().to_sec() * math.pi
 		self._br.sendTransform((2.0 * math.sin(t), 2.0 * math.cos(t), 0.0),
                          (0.0, 0.0, 0.0, 1.0),
                          rospy.Time.now(),
                          "world",
                          "chest")
+		
 
 # main
 def main():
 	transform = Transform()
-	rospy.spin()
+	rate = rospy.Rate(10.0)
+
+	# as main() is invoked in the script, while loop has to be in the main() to continuosly working
+	while not rospy.is_shutdown():
+		transform.tf_broadcast()
+		# rospy.spin()	# rospy.spin() keeps python from exiting until the node is stopped
+		rate.sleep()
 
 	# # declare the subscriber node for sensor data
 	# rospy.init_node('process_data', anonymous=True)
