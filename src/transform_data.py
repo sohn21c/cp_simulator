@@ -52,25 +52,20 @@ class Transform(object):
 
 		
 	def tf_broadcast(self):
-		# broadcasting to tf
-		t = rospy.Time.now().to_sec() * math.pi
-		self._br.sendTransform((2.0 * math.sin(t), 2.0 * math.cos(t), 0.0),
-                         (0.0, 0.0, 0.0, 1.0),
-                         rospy.Time.now(),
-                         "world",
-                         "chest")
-		
+		while not rospy.is_shutdown():
+			# broadcasting to tf
+			t = rospy.Time.now().to_sec() * math.pi
+			self._br.sendTransform((2.0 * math.sin(t), 2.0 * math.cos(t), 0.0),
+	                         (0.0, 0.0, 0.0, 1.0),
+	                         rospy.Time.now(),
+	                         "world",
+	                         "chest")
+			self._rate.sleep()
 
 # main
 def main():
 	transform = Transform()
-	rate = rospy.Rate(10.0)
-
-	# as main() is invoked in the script, while loop has to be in the main() to continuosly working
-	while not rospy.is_shutdown():
-		transform.tf_broadcast()
-		# rospy.spin()	# rospy.spin() keeps python from exiting until the node is stopped
-		rate.sleep()
+	transform.tf_broadcast()
 
 	# # declare the subscriber node for sensor data
 	# rospy.init_node('process_data', anonymous=True)
