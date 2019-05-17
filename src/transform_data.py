@@ -11,8 +11,10 @@ import rospy
 import numpy as np 
 import tf
 import math
+import csv
 from cp_simulator.msg import Sensor
 from sensor_msgs.msg import JointState
+from tf.transformations import quaternion_from_euler
 
 class Transform(object):
 	def __init__(self):
@@ -22,12 +24,7 @@ class Transform(object):
 		rospy.init_node('transform_data', anonymous=True)
 		self._sensor_sub = rospy.Subscriber('sensor', Sensor, self.data_process)
 		self._br = tf.TransformBroadcaster()
-		self._rate = rospy.Rate(10.0)
-
-		# conversion coefficients for data process
-		self._fps = 200
-		self._acc_conv = 8 / 2**16
-		self._gyro_conv = 1000 / 2**16 * np.pi / 180
+		self._rate = rospy.Rate(200.0)
 		return
 
 	def data_process(self, data):
@@ -50,22 +47,60 @@ class Transform(object):
 		# loginfo to check receiving data
 		rospy.loginfo("Receiving data %f, %f, %f, %f" %(self._acc_x, self._acc_y, self._acc_z, self._gyro_x))
 
-		
-	def tf_broadcast(self):
+	def get_pose(self, filename):
+		"""
+		reads the pose from the .csv file
+		"""
+		with open(filename, mode='r') as csvreader:
+			csv_reader = csv.reader(csvreader, delimiter=',')
+			pos_time = list(csv_reader)
+
+		return pos_time
+
+	def tf_broadcast(self, pos):
+		"""
+		broadcasts tf data 
+		"""
+		# index
+		ind = 0
+
 		while not rospy.is_shutdown():
-			# broadcasting to tf
-			t = rospy.Time.now().to_sec() * math.pi
-			self._br.sendTransform((2.0 * math.sin(t), 2.0 * math.cos(t), 0.0),
-	                         (0.0, 0.0, 0.0, 1.0),
+			#### checking block for conversion of string from .csv file to floating
+			# rospy.loginfo("receiving %d" %(len(pos)))
+			# rospy.loginfo("string %s" %(pos[ind][0]))
+			# rospy.loginfo("float %f" %(float(pos[ind][0])))
+
+			# step increase the index and rewind when maxed
+			if ind == len(pos) - 1:
+				ind = 0
+				rospy.sleep(3)
+			ind += 1
+
+			# broadcast to tf
+			self._br.sendTransform((float(pos[ind][0]), float(pos[ind][1]), float(pos[ind][2])), 
+							(0.0, 0.0, 0.0, 1.0),
 	                         rospy.Time.now(),
 	                         "world",
 	                         "chest")
+
+			##### dummy broadcaster
+			# t = rospy.Time.now().to_sec() * math.pi
+			# self._br.sendTransform((2.0 * math.sin(t), 2.0 * math.cos(t), 0.0),
+	  #                        (0.0, 0.0, 0.0, 1.0),
+	  #                        rospy.Time.now(),
+	  #                        "world",
+	  #                        "chest")
 			self._rate.sleep()
 
 # main
 def main():
+	# input .csv file generated from the helper function sciprt
+	filename = raw_input("> ")
+
+	# instantiate the Transform class	
 	transform = Transform()
-	transform.tf_broadcast()
+	pos = transform.get_pose(filename)
+	transform.tf_broadcast(pos)
 
 	# # declare the subscriber node for sensor data
 	# rospy.init_node('process_data', anonymous=True)

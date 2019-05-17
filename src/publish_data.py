@@ -10,43 +10,36 @@ import rospy
 import time
 import data_parser
 from cp_simulator.msg import Sensor
+from gemetry_msgs.msg import Transform
 
 # define data_publisher
 def data_pub(filename):
 	# retrieve the data from the data_parser module
 	acc_x, acc_y, acc_z, gyro_x, gyro_y, gyro_z = data_parser.data_parser(filename)
-
 	# create the data index 
 	ind = 0
-
 	# initiate the ROS node named 'data_publisher'
 	rospy.init_node('publish_data')
-
 	# publishing msg type 'Sensor' to topic 'sensor'. queue_size limits the number of queued messages if any subscriber is not receiving 
 	pub_sensor = rospy.Publisher('sensor', Sensor, queue_size = 10)
-
 	# set the frequency of data transfer (sensor freq. 200Hz)
 	############ Rate control not working!!!
 	rate = rospy.Rate(1)
-
-	##### delay 2 seconds
-	time.sleep(2)
-
+	##### delay 5 seconds
+	time.sleep(5)
 	##### to measure the duration of the loop
 	current_time = rospy.Time.now()
 
 	while not rospy.is_shutdown():
-		# Instantiate the custom message
+		# instantiate the custom message
 		data = Sensor()
-
-		# Slice the data points 
+		# slice the data points 
 		data.acc_x = acc_x[ind]
 		data.acc_y = acc_y[ind]
 		data.acc_z = acc_z[ind]
 		data.gyro_x = gyro_x[ind]
 		data.gyro_y = gyro_y[ind]
 		data.gyro_z = gyro_z[ind]
-
 		# increase the data index by 1
 		ind += 1
 
