@@ -26,18 +26,20 @@ One can find the detailed project timeline [here](https://github.com/sohn21c/cp_
 
 
 ## Algorithm  
+```
 From initial measurement of sensor and gravity represented in world frame(0, 0, -|gravity|), get RR.  
 Sensor coordinate in world frame <- RR(dot)Identity matrix  
   
 While not done:  
-	sensor acceleration in {w} <- RR(dot)sensor acceleration in {b}
-	sensor acceleration in {w} -= gravity
-	velocity in {w} = sensor acceleration in {w} * T
-	position in {w} = velocity in {w} * T
-	rotation of frame = Single Orthogonal Rotation Angle(ang velocity)
-	updated sensor coordinate = sensor coordinate(dot)rotation of frame
-	updated RR = RR(dot)rotation of frame
-	get quaternion from so3
 
-return position in {w}, quaternion 
+	sensor acceleration in {w} <- RR(dot)sensor acceleration in {b}  
+	sensor acceleration in {w} -= gravity  
+	velocity in {w} = sensor acceleration in {w} * T  
+	position in {w} = velocity in {w} * T  
+	rotation of frame = Single Orthogonal Rotation Angle(ang velocity)  
+	updated sensor coordinate = sensor coordinate(dot)rotation of frame  
+	updated RR = RR(dot)rotation of frame  
+	get quaternion from so3  
 
+return position in {w}, quaternion   
+```
