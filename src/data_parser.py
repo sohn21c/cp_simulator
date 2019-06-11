@@ -11,6 +11,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def data_parser(filename):
+	"""
+	parses the measurements of accelerometer and gyroscope in 3 axes and separates them in each container
+
+	input:
+		- filename: name of the file in the same directory 
+	output:
+		- acc_x, acc_y, acc_z: acceleration for each axis in m/s/s
+		- gyro_x, gyro_y, gyro_z: angular velocity w.r.t each axis in rad/s
+	"""
 	# get the CWD
 	cwd = os.getcwd()
 
@@ -44,26 +53,30 @@ def data_parser(filename):
 		# Parse each line and store the data in each container
 		for row in data[1:]:
 			time_stamp.append(float(row[0]))
-			acc_x.append(float(row[1]) * acc_conv)
+			# all signed to be negative to compensate the measurmeent direction from IMU. IMU measures it in opposite direction
+			acc_x.append(float(row[1]) * acc_conv)	
 			acc_y.append(float(row[2]) * acc_conv)
 			acc_z.append(float(row[3]) * acc_conv)
 			# un-bias the gyroscope data
+			# gyro_x.append((float(row[4]) * gyro_conv))
+			# gyro_y.append((float(row[5]) * gyro_conv))
+			# gyro_z.append((float(row[6]) * gyro_conv))
 			gyro_x.append((float(row[4]) - float(data[1][4])) * gyro_conv)
 			gyro_y.append((float(row[5]) - float(data[1][5])) * gyro_conv)
 			gyro_z.append((float(row[6]) - float(data[1][6])) * gyro_conv)
 
 	# # plot for check
 	# plot_x = np.linspace(0, 100, len(acc_x))
-	# plt.plot(plot_x, acc_x)
-	# plt.plot(plot_x, acc_y)
-	# plt.plot(plot_x, acc_z)
+	# plt.plot(plot_x, acc_x, 'r')
+	# plt.plot(plot_x, acc_y, 'g')
+	# plt.plot(plot_x, acc_z, 'b')
 	# plt.show()
 
 	# # plot for check
 	# plot_x = np.linspace(0, 100, len(acc_x))
-	# plt.plot(plot_x, gyro_x)
-	# plt.plot(plot_x, gyro_y)
-	# plt.plot(plot_x, gyro_z)
+	# plt.plot(plot_x, gyro_x, 'r')
+	# plt.plot(plot_x, gyro_y, 'g')
+	# plt.plot(plot_x, gyro_z, 'b')
 	# plt.show()
 
 	return acc_x, acc_y, acc_z, gyro_x, gyro_y, gyro_z
