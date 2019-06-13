@@ -27,27 +27,42 @@ class Transform(object):
 		rospy.init_node('two_arm_transform', anonymous=True)
 		self._br = tf.TransformBroadcaster()
 		self._rate = rospy.Rate(200.0)
-		self._posx = []
-		self._posy = []
-		self._posz = []
-		self._posRot = []
+		self._posx1 = []
+		self._posy1 = []
+		self._posz1 = []
+		self._posRot1 = []
+		self._posx2 = []
+		self._posy2 = []
+		self._posz2 = []
+		self._posRot2 = []
 
 		return
 
-	def get_pose(self, filename):
+	def get_pose(self, filename1, filename2):
 		"""
 		reads the pose from the .csv file
 		"""
-		with open(filename, mode='r') as csvreader:
+		with open(filename1, mode='r') as csvreader:
 			csv_reader = csv.reader(csvreader, delimiter=',')
 			pos_time = list(csv_reader)
 
 			# parse the pose.csv file and separate the pose information. All data point convered to floating number from csv
 			for i in range(len(pos_time)):
-				self._posx.append(float(pos_time[i][0]))
-				self._posy.append(float(pos_time[i][1]))
-				self._posz.append(float(pos_time[i][2]))
-				self._posRot.append(np.array([[float(pos_time[i][3]), float(pos_time[i][4]), float(pos_time[i][5])], [float(pos_time[i][6]), float(pos_time[i][7]), float(pos_time[i][8])], [float(pos_time[i][9]), float(pos_time[i][10]), float(pos_time[i][11])]]))
+				self._posx1.append(float(pos_time[i][0]))
+				self._posy1.append(float(pos_time[i][1]))
+				self._posz1.append(float(pos_time[i][2]))
+				self._posRot1.append(np.array([[float(pos_time[i][3]), float(pos_time[i][4]), float(pos_time[i][5])], [float(pos_time[i][6]), float(pos_time[i][7]), float(pos_time[i][8])], [float(pos_time[i][9]), float(pos_time[i][10]), float(pos_time[i][11])]]))
+
+		with open(filename2, mode='r') as csvreader:
+			csv_reader = csv.reader(csvreader, delimiter=',')
+			pos_time = list(csv_reader)
+
+			# parse the pose.csv file and separate the pose information. All data point convered to floating number from csv
+			for i in range(len(pos_time)):
+				self._posx2.append(float(pos_time[i][0]))
+				self._posy2.append(float(pos_time[i][1]))
+				self._posz2.append(float(pos_time[i][2]))
+				self._posRot2.append(np.array([[float(pos_time[i][3]), float(pos_time[i][4]), float(pos_time[i][5])], [float(pos_time[i][6]), float(pos_time[i][7]), float(pos_time[i][8])], [float(pos_time[i][9]), float(pos_time[i][10]), float(pos_time[i][11])]]))
 
 		# # plot for cross-validate
 		# plot_x = np.linspace(0, 100, len(pos_time))
@@ -74,35 +89,30 @@ class Transform(object):
 			# rospy.loginfo("float %f" %(float(ops[ind][0])))
 
 			# step increase the index and rewind when maxed
-			if ind == len(self._posx) - 1:
+			if ind == len(self._posx1) - 1:
 				ind = 0
 				rospy.sleep(3)
 
 			# conver angles to quaternion
-			euler_x, euler_y, euler_z = euler_from_matrix(self._posRot[ind])
-			posQuat = quaternion_from_euler(euler_x, euler_y, euler_z)
+			euler_x, euler_y, euler_z = euler_from_matrix(self._posRot1[ind])
+			posQuat1 = quaternion_from_euler(euler_x, euler_y, euler_z)
 
+			euler_x, euler_y, euler_z = euler_from_matrix(self._posRot2[ind])
+			posQuat2 = quaternion_from_euler(euler_x, euler_y, euler_z)
 			# broadcast to tf
 			# RVIZ axis flipped to real axis. All axis multiplied by (-1)
 			self._br.sendTransform(
 					(0., 0., 0.),	
-					(0., 0., 0., 1.0), 
+					(posQuat1[0], posQuat1[1], posQuat1[2], posQuat1[3]), 
 					rospy.Time.now(), 
 					"upper_arm", 
 					"base_link")
 			self._br.sendTransform(
 					(0.15, 0., 0.),	
-					(posQuat[0], posQuat[1], posQuat[2], posQuat[3]), 
+					(posQuat2[0], posQuat2[1], posQuat2[2], posQuat2[3]), 
 					rospy.Time.now(), 
 					"elbow", 
 					"upper_arm")
-
-			# self._br.sendTransform(
-			# 		(self._posx[ind]*5, self._posy[ind], self._posz[ind]),	
-			# 		(posQuat[0], posQuat[1], posQuat[2], posQuat[3]), 
-			# 		rospy.Time.now(), 
-			# 		"upper_arm", 
-			# 		"base_link")
 
 			# rospy.loginfo("broadcasting %f %f %f %f" %(posQuat[0], posQuat[1],posQuat[2], posQuat[3]))
 
@@ -115,8 +125,11 @@ class Transform(object):
 # main
 def main():
 	# instantiate the Transform class	
+	# filename = raw_input("filename > ")
+	filename1 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "two_arm8_upper.csv"
+	filename2 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "two_arm8_fore.csv"
 	transform = Transform()
-	transform.get_pose("/home/james/catkin_ws/src/cp_simulator/src/two_arm1.csv")
+	transform.get_pose(filename1, filename2)
 	transform.tf_broadcast()
 
 	rospy.spin()
