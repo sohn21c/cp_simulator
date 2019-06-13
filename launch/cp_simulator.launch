@@ -1,0 +1,23 @@
+<launch>
+
+  <arg name="model" default="$(find cp_simulator)/urdf/two_link.urdf" />
+  <arg name="use_gui" default="false" />
+  <arg name="use_rviz" default="true" />
+  <arg name="rvizconfig" default="$(find cp_simulator)/rviz/urdf.rviz" />
+
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
+
+  <group if="$(arg use_gui)">
+    <param name="use_gui" value="true"/>
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+  </group>
+  <group if="$(arg use_rviz)">
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+  </group>
+
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+    <param name="publish_frequency" value="50" />
+  <node name="two_arm_transform" pkg="cp_simulator" type="two_arm_transform.py" output="screen" />
+  <!-- <node name="two_arm" pkg="cp_simulator" type="two_arm.py" output="screen" /> -->
+
+</launch>
