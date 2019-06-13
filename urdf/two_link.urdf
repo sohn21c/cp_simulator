@@ -36,7 +36,7 @@
     </visual>
   </link>
 
-  <joint name="base_to_upper_arm" type="continuous">
+  <joint name="base_to_upper" type="continuous">
     <parent link="base_link"/>
     <child link="upper_arm"/>
     <axis xyz="0 1 0"/>
