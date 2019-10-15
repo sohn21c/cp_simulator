@@ -103,16 +103,25 @@ class Transform(object):
 			# RVIZ axis flipped to real axis. All axis multiplied by (-1)
 			self._br.sendTransform(
 					(0., 0., 0.),	
-					(posQuat1[0], posQuat1[1], posQuat1[2], posQuat1[3]), 
+					# (posQuat2[0], posQuat2[1], posQuat2[2], posQuat2[3]), 
+					(0., 0., 0., 1.),
 					rospy.Time.now(), 
-					"upper_arm", 
+					"body", 
 					"base_link")
 			self._br.sendTransform(
-					(0.15, 0., 0.),	
+					(0., 0.15, 0.),	
+					(posQuat1[0], posQuat1[1], posQuat1[2], posQuat1[3]), 
+					# (0., 0., 0., 1.), 
+					rospy.Time.now(), 
+					"right_shoulder", 
+					"body")
+			self._br.sendTransform(
+					(0.25, 0., 0.),	
 					(posQuat2[0], posQuat2[1], posQuat2[2], posQuat2[3]), 
 					rospy.Time.now(), 
-					"elbow", 
-					"upper_arm")
+					"right_elbow", 
+					"right_shoulder")
+
 
 			# rospy.loginfo("broadcasting %f %f %f %f" %(posQuat[0], posQuat[1],posQuat[2], posQuat[3]))
 
@@ -126,8 +135,8 @@ class Transform(object):
 def main():
 	# instantiate the Transform class	
 	# filename = raw_input("filename > ")
-	filename1 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "two_arm8_upper.csv"
-	filename2 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "two_arm8_fore.csv"
+	filename1 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "demo10_upper.csv"
+	filename2 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "demo10_fore.csv"
 	transform = Transform()
 	transform.get_pose(filename1, filename2)
 	transform.tf_broadcast()

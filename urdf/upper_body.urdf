@@ -1,0 +1,157 @@
+<!--
+  Author: James Sohn
+  Description: Human-like Robot URDF
+  Last Updated: 10/14/19
+-->
+<?xml version="1.0"?>
+<robot name="two_link">
+  <material name="blue">
+    <color rgba="0 0 1 1"/>
+  </material>
+
+  <material name="red">
+    <color rgba="1 0 0 1"/>
+  </material>
+
+  <material name="green">
+    <color rgba="0 1 0 1"/>
+  </material>
+
+  <material name="orange">
+    <color rgba="1 0.5 0 1"/>
+  </material>
+
+  <material name="black">
+    <color rgba="0 0 0 1"/>
+  </material>
+
+  <material name="white">
+    <color rgba="0.8 0.8 0.8 1"/>
+  </material>
+
+  <material name="purple">
+    <color rgba="0.625 0.125 0.9375 1"/>
+  </material>
+  
+  <material name="skin">
+    <color rgba="0.99 0.76 0.66 1"/>
+  </material>
+  
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <box size="0.1 0.1 0"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="black"/>
+    </visual>
+  </link>
+
+  <joint name="base_to_body" type="continuous">
+    <parent link="base_link"/>
+    <child link="body"/>
+    <axis xyz="0 0 1"/>
+    <origin xyz="0.0 0 0"/>
+  </joint>  
+
+  <link name="body">
+    <visual>
+      <geometry>
+        <box size="0.2 0.5 0.1"/>
+      </geometry>
+      <origin rpy="1.57 0 1.57" xyz="0 0 -0.2"/>
+      <material name="purple"/>
+    </visual>
+  </link>
+
+  <joint name="right_shoulder" type="continuous">
+    <parent link="body"/>
+    <child link="right_shoulder"/>
+    <axis xyz="0 0 1"/>
+    <origin xyz="0.0 -0.15 0"/>
+  </joint>  
+
+  <link name="right_shoulder">
+    <visual>
+      <geometry>
+        <sphere radius="0.01"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="white"/>
+    </visual>
+  </link>
+
+  <joint name="right_shoulder_to_upper" type="fixed">
+    <parent link="right_shoulder"/>
+    <child link="right_arm"/>
+    <axis xyz="0 0 1"/>
+    <origin xyz="0.125 0 0"/>
+  </joint>  
+
+  <link name="right_arm">
+    <visual>
+      <geometry>
+        <cylinder length="0.25" radius="0.03"/>
+        <!-- <box size="0.04 0.04 0.25"/> -->
+      </geometry>
+      <origin rpy="0 1.57075 0" xyz="0 0 0"/>
+      <material name="skin"/>
+    </visual>
+  </link>
+
+  <joint name="right_arm_to_elbow" type="revolute">
+    <limit lower="0"
+         upper="2.5"
+         effort="10.0"
+         velocity="5.0" />
+    <parent link="right_arm"/>
+    <child link="right_elbow"/>
+    <origin xyz="-0.1 0 0"/>
+  </joint>
+
+  <link name="right_elbow">
+    <visual>
+      <geometry>
+        <sphere radius="0.01"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="white"/>
+    </visual>
+  </link>
+
+  <joint name="right_elbow_to_lower" type="fixed">
+    <parent link="right_elbow"/>
+    <child link="right_forearm"/>
+    <axis xyz="0 0 1"/>
+    <origin xyz="0.1 0 0"/>
+  </joint>
+
+  <link name="right_forearm">
+    <visual>
+      <geometry>
+        <cylinder length="0.2" radius="0.03"/>
+        <!-- <box size="0.04 0.04 0.25"/> -->
+      </geometry>
+      <origin rpy="0 1.57075 0" xyz="0 0 0"/>
+      <material name="skin"/>
+    </visual>
+  </link>
+
+  <joint name="right_wrist" type="fixed">
+    <parent link="right_forearm"/>
+    <child link="right_hand"/>
+    <axis xyz="0 0 1"/>
+    <origin xyz="0.1 0 0"/>
+  </joint>
+
+  <link name="right_hand">
+    <visual>
+      <geometry>
+        <sphere radius="0.03"/>
+        <!-- <box size="0.04 0.04 0.25"/> -->
+      </geometry>
+      <origin rpy="0 1.57075 0" xyz="0.025 0 0"/>
+      <material name="skin"/>
+    </visual>
+  </link>
+</robot>

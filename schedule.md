@@ -18,7 +18,6 @@
 - Week of 04/15:
 	- Kick-off meeting - Discuss the scope of the project  
 
-
 - Week of 04/22:
 	- Get to know sensors used in the device and understand the data format  
 

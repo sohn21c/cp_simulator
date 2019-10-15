@@ -186,6 +186,10 @@ def pos_rot_calculation(filename):
 	rot_time_20 = []
 	rot_time_21 = []
 	rot_time_22 = []
+	acc_world_time = []
+	acc_mag_time = []
+	acc_mag_diff_time = []
+	acc_mag_copy = 0.0
 
 	# iterate through the measurement and update the position and orientation of the frame
 	for i in range(len(acc_x)):
@@ -218,7 +222,14 @@ def pos_rot_calculation(filename):
 		# update the Rotation matrix for world frame representation
 		RR = np.dot(RR, Rot_body)
 
-		# append to container
+		# test the moving average and find stationary
+		if i < len(acc_x) - 1:
+			acc_mag_diff_time.append(np.linalg.norm(acc_world)-acc_mag_copy)
+			acc_mag_copy = np.linalg.norm(acc_world)
+
+		# append data point to container for plot
+		acc_mag_time.append(np.linalg.norm(acc_world))
+		acc_world_time.append(acc_world)
 		posx_time.append(pos_world[0])
 		posy_time.append(pos_world[1])
 		posz_time.append(pos_world[2])
@@ -232,15 +243,98 @@ def pos_rot_calculation(filename):
 		rot_time_21.append(sensor_coord_world[2,1])
 		rot_time_22.append(sensor_coord_world[2,2])
 
-	# plot for check
-	plot_x = np.linspace(0, 100, len(posx_time))
-	plt.plot(plot_x, posx_time, 'r', label='x')
-	plt.plot(plot_x, posy_time, 'g', label='y')
-	plt.plot(plot_x, posz_time, 'b', label='z')
-	plt.title("Position", loc='center')
-	plt.legend(loc='upper left')
-	plt.ylabel("[m]")
-	plt.xlabel("Relative time")
+		##### test
+		# # continue until key pressed and print result
+		# input("hit enter")
+		# print(sensor_coord_world)
+
+	# # position plot
+	# plot_x = np.linspace(0, 100, len(posx_time))
+	# plt.figure(3)
+	# plt.plot(plot_x, posx_time, 'r', label='x')
+	# plt.plot(plot_x, posy_time, 'g', label='y')
+	# plt.plot(plot_x, posz_time, 'b', label='z')
+	# plt.title("Position", loc='center')
+	# plt.legend(loc='upper left')
+	# plt.ylabel("[m]")
+	# plt.xlabel("Relative time")
+	# plt.show()
+
+	# # acceleartion in world frame plot
+	# plot_x = np.linspace(0, 100, len(acc_world_time))
+	# plt.figure(4)
+	# plt.plot(plot_x, acc_world_time)
+	# plt.title("Linear acceleration in computation", loc='center')
+	# # plt.legend(loc='upper left')
+	# plt.ylabel("[m/s/s]")
+	# plt.xlabel("Relative time")
+
+	# # acceleartion magnitude plot
+	# plot_x = np.linspace(0, 100, len(acc_world_time))
+	# plt.figure(5)
+	# plt.plot(plot_x, acc_mag_time)
+	# plt.title("Linear acceleration magnitutde in computation", loc='center')
+	# # plt.legend(loc='upper left')
+	# plt.ylabel("[m/s/s]")
+	# plt.xlabel("Relative time")
+	# # plt.ylim(top=0.5, bottom=-0.5)
+	# # plt.xlim(right=20, left=0)
+
+	# # acceleartion magnitude diff plot: difference between previous and current time step
+	# plot_x = np.linspace(0, 100, len(acc_world_time)-1)
+	# plt.figure(6)
+	# plt.plot(plot_x, acc_mag_diff_time)
+	# plt.title("Linear acceleration magnitutde diff in computation", loc='center')
+	# # plt.legend(loc='upper left')
+	# plt.ylabel("[m/s/s]")
+	# plt.xlabel("Relative time")
+	# plt.ylim(top=0.5, bottom=-0.5)
+	# plt.xlim(right=20, left=0)
+
+	# acceleration magnitude moving average for 20 timesteps
+	# acc_mag_average = []
+	# for i in range(len(acc_mag_time)):
+	# 	if i < 20:
+	# 		acc_mag_average.append(acc_mag_time[i])
+	# 	else:
+	# 		acc_mag_average.append(np.sum(acc_mag_time[i-20:i])/20.0)
+
+	# # acceleartion magnitude moving average plot
+	# plot_x = np.linspace(0, 100, len(acc_world_time))
+	# plt.figure(7)
+	# plt.plot(plot_x, acc_mag_average)
+	# plt.title("Linear acceleration magnitutde WITHOUT GRAVITY", loc='center')
+	# # plt.legend(loc='upper left')
+	# plt.ylabel("[m/s/s]")
+	# plt.xlabel("Relative time")
+	# # plt.ylim(top=0.5, bottom=-0.5)
+	# # plt.xlim(right=20, left=0)
+
+	# # peak difference(max - min) within 10 time steps
+	# acc_peakdiff_time = []
+	# for i in range(len(acc_mag_time)):
+	# 	if acc_mag_average[i] > 2.0:
+	# 		acc_peakdiff_time.append(2.0)
+	# 	else:
+	# 		if i == 0:
+	# 			acc_peakdiff_time.append(acc_mag_average[i])
+	# 		elif i < 10:
+	# 			acc_peakdiff_time.append(np.max(acc_mag_average[0:i])-np.min(acc_mag_average[0:i]))
+	# 		elif i >= 10:
+	# 			acc_peakdiff_time.append(np.max(acc_mag_average[i-10:i])-np.min(acc_mag_average[i-10:i]))
+
+	# acceleartion mag peak diff plot
+	# plot_x = np.linspace(0, 100, len(acc_world_time))
+	# plt.figure(8)
+	# plt.plot(plot_x, acc_peakdiff_time)
+	# plt.title("Linear acceleration magnitutde peak diff in computation", loc='center')
+	# plt.legend(loc='upper left')
+	# plt.ylabel("[m/s/s]")
+	# plt.xlabel("Relative time")
+	# plt.ylim(top=0.5, bottom=-0.5)
+	# plt.xlim(right=20, left=0)
+
+	# show plot
 	plt.show()
 
 	return posx_time, posy_time, posz_time, rot_time_00, rot_time_01, rot_time_02, rot_time_10, rot_time_11, rot_time_12, rot_time_20,rot_time_21, rot_time_22
@@ -249,6 +343,7 @@ if __name__ == '__main__':
 	try:
 		# receive command line input for file name
 		filename = input("> ")
+		filename = "/home/james/catkin_ws/src/cp_simulator/demo/" + filename
 		
 		# publishes data from the file
 		posx_time, posy_time, posz_time, \
@@ -257,7 +352,7 @@ if __name__ == '__main__':
 		rot_time_20,rot_time_21, rot_time_22 = pos_rot_calculation(filename)
 
 		# write the csv file
-		with open('pose.csv', mode='w') as csvwriter:
+		with open('result.csv', mode='w') as csvwriter:
 			writer = csv.writer(csvwriter, delimiter = ',')
 			for i in range(len(posx_time)):
 				writer.writerow(

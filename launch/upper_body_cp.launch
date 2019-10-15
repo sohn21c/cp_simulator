@@ -1,6 +1,6 @@
 <launch>
 
-  <arg name="model" default="$(find cp_simulator)/urdf/two_link.urdf" />
+  <arg name="model" default="$(find cp_simulator)/urdf/upper_body.urdf" />
   <arg name="use_gui" default="false" />
   <arg name="use_rviz" default="true" />
   <arg name="rvizconfig" default="$(find cp_simulator)/rviz/urdf.rviz" />
@@ -17,6 +17,6 @@
 
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
     <param name="publish_frequency" value="50" />
-  <node name="two_arm_transform" pkg="cp_simulator" type="two_arm_transform.py" output="screen" />
+  <node name="upper_body_transform" pkg="cp_simulator" type="upper_body_transform.py" output="screen" />
 
 </launch>
