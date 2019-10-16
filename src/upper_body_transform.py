@@ -1,10 +1,9 @@
 #!/usr/bin/env python
-
 """
-Date: 06/11/2019
+Date: 10/15/2019
 Author: James Sohn
 
-This node is to run two arm simulation in RVIZ
+This is a node script to read position and angle data from .csv files and convert them to human-like geometry in Rviz
 """
 # import relevant libraries
 import rospy
@@ -18,51 +17,46 @@ from sensor_msgs.msg import JointState
 from tf.transformations import quaternion_from_euler
 from tf.transformations import euler_from_matrix
 
-
 class Transform(object):
-	def __init__(self):
+	def __init__(self, num_sensors):
 		""" 
-		initiate the parameters
+		initiate the parameters pertinent to the number of sensors used for simulation
 		"""
 		rospy.init_node('two_arm_transform', anonymous=True)
+		self.num_sensors = num_sensors
 		self._br = tf.TransformBroadcaster()
 		self._rate = rospy.Rate(200.0)
-		self._posx1 = []
-		self._posy1 = []
-		self._posz1 = []
-		self._posRot1 = []
-		self._posx2 = []
-		self._posy2 = []
-		self._posz2 = []
-		self._posRot2 = []
+
+		# create emptpy containers for each data points
+		for i in range(1, num_sensors+1):
+			exec('self._posx%d = []' %i)
+			exec('self._posy%d = []' %i)
+			exec('self._posz%d = []' %i)
+			exec('self._posRot%d = []' %i)
 
 		return
 
-	def get_pose(self, filename1, filename2):
+	def get_pose(self, *files):
 		"""
 		reads the pose from the .csv file
 		"""
-		with open(filename1, mode='r') as csvreader:
-			csv_reader = csv.reader(csvreader, delimiter=',')
-			pos_time = list(csv_reader)
+		# Assert the right number of files provided
+		assert len(files) == self.num_sensors, 'Wrong number of .csv files provided'
 
-			# parse the pose.csv file and separate the pose information. All data point convered to floating number from csv
-			for i in range(len(pos_time)):
-				self._posx1.append(float(pos_time[i][0]))
-				self._posy1.append(float(pos_time[i][1]))
-				self._posz1.append(float(pos_time[i][2]))
-				self._posRot1.append(np.array([[float(pos_time[i][3]), float(pos_time[i][4]), float(pos_time[i][5])], [float(pos_time[i][6]), float(pos_time[i][7]), float(pos_time[i][8])], [float(pos_time[i][9]), float(pos_time[i][10]), float(pos_time[i][11])]]))
-
-		with open(filename2, mode='r') as csvreader:
-			csv_reader = csv.reader(csvreader, delimiter=',')
-			pos_time = list(csv_reader)
-
-			# parse the pose.csv file and separate the pose information. All data point convered to floating number from csv
-			for i in range(len(pos_time)):
-				self._posx2.append(float(pos_time[i][0]))
-				self._posy2.append(float(pos_time[i][1]))
-				self._posz2.append(float(pos_time[i][2]))
-				self._posRot2.append(np.array([[float(pos_time[i][3]), float(pos_time[i][4]), float(pos_time[i][5])], [float(pos_time[i][6]), float(pos_time[i][7]), float(pos_time[i][8])], [float(pos_time[i][9]), float(pos_time[i][10]), float(pos_time[i][11])]]))
+		# Assign data points to right container
+		for index, file in enumerate(files, 1):
+			with open(file, mode='r') as csvreader:
+				csv_reader = csv.reader(csvreader, delimiter=',')
+				pos_time = list(csv_reader)				
+				exec('pos_x = self._posx%d' %index)
+				exec('pos_y = self._posy%d' %index)
+				exec('pos_z = self._posz%d' %index)
+				exec('posRot = self._posRot%d' %index)
+				for i in range(len(pos_time)):
+					pos_x.append(float(pos_time[i][0]))
+					pos_y.append(float(pos_time[i][1]))
+					pos_z.append(float(pos_time[i][2]))
+					posRot.append(np.array([[float(pos_time[i][3]), float(pos_time[i][4]), float(pos_time[i][5])], [float(pos_time[i][6]), float(pos_time[i][7]), float(pos_time[i][8])], [float(pos_time[i][9]), float(pos_time[i][10]), float(pos_time[i][11])]]))
 
 		# # plot for cross-validate
 		# plot_x = np.linspace(0, 100, len(pos_time))
@@ -94,11 +88,12 @@ class Transform(object):
 				rospy.sleep(3)
 
 			# conver angles to quaternion
-			euler_x, euler_y, euler_z = euler_from_matrix(self._posRot1[ind])
-			posQuat1 = quaternion_from_euler(euler_x, euler_y, euler_z)
+			for i in range(1, self.num_sensors+1):
+				exec('posRot = self._posRot%d' %i)
+				euler_x, euler_y, euler_z = euler_from_matrix(posRot[ind])
+				posQuat = quaternion_from_euler(euler_x, euler_y, euler_z) 	
+				exec('posQuat%d = posQuat' %i)
 
-			euler_x, euler_y, euler_z = euler_from_matrix(self._posRot2[ind])
-			posQuat2 = quaternion_from_euler(euler_x, euler_y, euler_z)
 			# broadcast to tf
 			# RVIZ axis flipped to real axis. All axis multiplied by (-1)
 			self._br.sendTransform(
@@ -122,7 +117,6 @@ class Transform(object):
 					"right_elbow", 
 					"right_shoulder")
 
-
 			# rospy.loginfo("broadcasting %f %f %f %f" %(posQuat[0], posQuat[1],posQuat[2], posQuat[3]))
 
 			# increment the index for next time step
@@ -137,7 +131,7 @@ def main():
 	# filename = raw_input("filename > ")
 	filename1 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "demo10_upper.csv"
 	filename2 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "demo10_fore.csv"
-	transform = Transform()
+	transform = Transform(2)
 	transform.get_pose(filename1, filename2)
 	transform.tf_broadcast()
 

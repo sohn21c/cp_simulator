@@ -1,9 +1,9 @@
+<?xml version="1.0"?>
 <!--
   Author: James Sohn
   Description: Human-like Robot URDF
   Last Updated: 10/14/19
 -->
-<?xml version="1.0"?>
 <robot name="two_link">
   <material name="blue">
     <color rgba="0 0 1 1"/>

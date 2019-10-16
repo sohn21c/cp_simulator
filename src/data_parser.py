@@ -54,10 +54,12 @@ def data_parser(filename):
 		# Parse each line and store the data in each container
 		for row in data[1:]:
 			time_stamp.append(float(row[0]))
+
 			# Acceleartion with conversion factor
 			acc_x.append(float(row[1]) * acc_conv)	
 			acc_y.append(float(row[2]) * acc_conv)
 			acc_z.append(float(row[3]) * acc_conv)
+
 			# # Angular velocity with conversion factor
 			# gyro_x.append((float(row[4]) * gyro_conv))
 			# gyro_y.append((float(row[5]) * gyro_conv))
@@ -74,6 +76,7 @@ def data_parser(filename):
 			# gyro_x.append((float(row[4]) * gyro_conv) - 0.0313)
 			# gyro_y.append((float(row[5]) * gyro_conv) + 0.0804)
 			# gyro_z.append((float(row[6]) * gyro_conv) - 0.0527)
+
 			# One can use this if sensor is not calibrated and biased
 			# gyro_x.append((float(row[4]) - float(data[1][4])) * gyro_conv)
 			# gyro_y.append((float(row[5]) - float(data[1][5])) * gyro_conv)
@@ -105,7 +108,7 @@ def data_parser(filename):
 	plt.xlabel("Relative time")
 	# plt.show()
 
-	# (optional) plot angle for check
+	# (optional) plot angular velocity for check
 	plot_x = np.linspace(0, 100, len(acc_x))
 	plt.figure(2)
 	plt.plot(plot_x, gyro_x, 'r', label='x')

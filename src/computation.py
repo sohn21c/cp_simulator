@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-Date: 05/13/2019
+Date: 10/15/2019
 Author: James Sohn
 
 This module contains helper functions used for computation at each stage to find the position and rotation
@@ -13,7 +13,6 @@ import math
 import data_parser
 import numpy as np
 import matplotlib.pyplot as plt 
-# from tf.transformations import quaternion_from_euler
 
 # define constant
 fps = 200
