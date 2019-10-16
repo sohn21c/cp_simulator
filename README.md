@@ -9,6 +9,9 @@ To successfully process and reproduce the human-body motion measured by the wire
 ## Background
 The motivation of this project is to properly capture and reproduce the body motion of patients that are either diagnosed with Cerebral Palsy, or at risk of such diagnosis. The simulator will eventually be used to build machine learning model in an attempt to build the end-to-end system that can diagnose CP by having a personel wear sensors and take measurements.
 
+## Sensor
+- BMI 160 Bosch Sensortec IMU
+
 ## Software 
 ### Package versions
 - Python 2.7.15+
