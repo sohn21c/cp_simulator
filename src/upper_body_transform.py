@@ -96,6 +96,7 @@ class Transform(object):
 
 			# broadcast to tf
 			# RVIZ axis flipped to real axis. All axis multiplied by (-1)
+			# body
 			self._br.sendTransform(
 					(0., 0., 0.),	
 					# (posQuat2[0], posQuat2[1], posQuat2[2], posQuat2[3]), 
@@ -103,6 +104,7 @@ class Transform(object):
 					rospy.Time.now(), 
 					"body", 
 					"base_link")
+			# right arm
 			self._br.sendTransform(
 					(0., 0.15, 0.),	
 					(posQuat1[0], posQuat1[1], posQuat1[2], posQuat1[3]), 
@@ -116,6 +118,49 @@ class Transform(object):
 					rospy.Time.now(), 
 					"right_elbow", 
 					"right_shoulder")
+			# left arm
+			self._br.sendTransform(
+					(0., -0.15, 0.),	
+					(posQuat3[0], posQuat3[1], posQuat3[2], posQuat3[3]), 
+					rospy.Time.now(), 
+					"left_shoulder", 
+					"body")
+			self._br.sendTransform(
+					(0.25, 0., 0.),	
+					(posQuat4[0], posQuat4[1], posQuat4[2], posQuat4[3]), 
+					rospy.Time.now(), 
+					"left_elbow", 
+					"left_shoulder")
+			# right leg
+			self._br.sendTransform(
+					(0., 0.075, -0.5),	
+					# (posQuat5[0], posQuat5[1], posQuat5[2], posQuat5[3]), 
+					(-0.707, 0., 0.707, 0.), 
+					rospy.Time.now(), 
+					"right_hip", 
+					"body")
+			self._br.sendTransform(
+					(0.275, 0., 0.),	
+					# (posQuat6[0], posQuat6[1], posQuat6[2], posQuat6[3]), 
+					(0., 0., 0., 1.),
+					rospy.Time.now(), 
+					"right_knee", 
+					"right_hip")
+			# left leg
+			self._br.sendTransform(
+					(0., -0.075, -0.5),	
+					# (posQuat7[0], posQuat7[1], posQuat7[2], posQuat7[3]), 
+					(0., 0., 0., 1.),
+					rospy.Time.now(), 
+					"left_hip", 
+					"body")
+			self._br.sendTransform(
+					(0.275, 0., 0.),	
+					# (posQuat8[0], posQuat8[1], posQuat8[2], posQuat8[3]), 
+					(-0.707, 0., 0.707, 0.), 
+					rospy.Time.now(), 
+					"left_knee", 
+					"left_hip")
 
 			# rospy.loginfo("broadcasting %f %f %f %f" %(posQuat[0], posQuat[1],posQuat[2], posQuat[3]))
 
@@ -131,8 +176,8 @@ def main():
 	# filename = raw_input("filename > ")
 	filename1 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "demo10_upper.csv"
 	filename2 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "demo10_fore.csv"
-	transform = Transform(2)
-	transform.get_pose(filename1, filename2)
+	transform = Transform(8)
+	transform.get_pose(filename1, filename2, filename1, filename2, filename1, filename2, filename1, filename2)
 	transform.tf_broadcast()
 
 	rospy.spin()

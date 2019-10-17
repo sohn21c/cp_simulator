@@ -2,9 +2,9 @@
 <!--
   Author: James Sohn
   Description: Human-like Robot URDF
-  Last Updated: 10/14/19
+  Last Updated: 10/17/19
 -->
-<robot name="two_link">
+<robot name="Robot">
   <material name="blue">
     <color rgba="0 0 1 1"/>
   </material>
@@ -36,7 +36,8 @@
   <material name="skin">
     <color rgba="0.99 0.76 0.66 1"/>
   </material>
-  
+
+<!-- Body -->
   <link name="base_link">
     <visual>
       <geometry>
@@ -64,6 +65,26 @@
     </visual>
   </link>
 
+<!-- Head -->
+  <joint name="neck" type="fixed">
+    <parent link="body"/>
+    <child link="head"/>
+    <axis xyz="0 0 1"/>
+    <origin xyz="0 0 0.1"/>
+  </joint>
+
+  <link name="head">
+    <visual>
+      <geometry>
+        <sphere radius="0.06"/>
+        <!-- <box size="0.04 0.04 0.25"/> -->
+      </geometry>
+      <origin rpy="0 1.57075 0" xyz="0 0 0.025"/>
+      <material name="skin"/>
+    </visual>
+  </link>
+
+<!-- Right arm -->
   <joint name="right_shoulder" type="continuous">
     <parent link="body"/>
     <child link="right_shoulder"/>
@@ -106,7 +127,7 @@
          velocity="5.0" />
     <parent link="right_arm"/>
     <child link="right_elbow"/>
-    <origin xyz="-0.1 0 0"/>
+    <origin xyz="0.125 0 0"/>
   </joint>
 
   <link name="right_elbow">
@@ -154,4 +175,275 @@
       <material name="skin"/>
     </visual>
   </link>
+
+<!-- Left arm -->
+  <joint name="left_shoulder" type="continuous">
+    <parent link="body"/>
+    <child link="left_shoulder"/>
+    <axis xyz="0 0 1"/>
+    <origin xyz="0.0 0.15 0"/>
+  </joint>  
+
+  <link name="left_shoulder">
+    <visual>
+      <geometry>
+        <sphere radius="0.01"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="white"/>
+    </visual>
+  </link>
+
+  <joint name="left_shoulder_to_upper" type="fixed">
+    <parent link="left_shoulder"/>
+    <child link="left_arm"/>
+    <axis xyz="0 0 1"/>
+    <origin xyz="0.125 0 0"/>
+  </joint>  
+
+  <link name="left_arm">
+    <visual>
+      <geometry>
+        <cylinder length="0.25" radius="0.03"/>
+        <!-- <box size="0.04 0.04 0.25"/> -->
+      </geometry>
+      <origin rpy="0 1.57075 0" xyz="0 0 0"/>
+      <material name="skin"/>
+    </visual>
+  </link>
+
+  <joint name="left_arm_to_elbow" type="revolute">
+    <limit lower="0"
+         upper="2.5"
+         effort="10.0"
+         velocity="5.0" />
+    <parent link="left_arm"/>
+    <child link="left_elbow"/>
+    <origin xyz="0.125 0 0"/>
+  </joint>
+
+  <link name="left_elbow">
+    <visual>
+      <geometry>
+        <sphere radius="0.01"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="white"/>
+    </visual>
+  </link>
+
+  <joint name="left_elbow_to_lower" type="fixed">
+    <parent link="left_elbow"/>
+    <child link="left_forearm"/>
+    <axis xyz="0 0 1"/>
+    <origin xyz="0.1 0 0"/>
+  </joint>
+
+  <link name="left_forearm">
+    <visual>
+      <geometry>
+        <cylinder length="0.2" radius="0.03"/>
+        <!-- <box size="0.04 0.04 0.25"/> -->
+      </geometry>
+      <origin rpy="0 1.57075 0" xyz="0 0 0"/>
+      <material name="skin"/>
+    </visual>
+  </link>
+
+  <joint name="left_wrist" type="fixed">
+    <parent link="left_forearm"/>
+    <child link="left_hand"/>
+    <axis xyz="0 0 1"/>
+    <origin xyz="0.1 0 0"/>
+  </joint>
+
+  <link name="left_hand">
+    <visual>
+      <geometry>
+        <sphere radius="0.03"/>
+        <!-- <box size="0.04 0.04 0.25"/> -->
+      </geometry>
+      <origin rpy="0 1.57075 0" xyz="0.025 0 0"/>
+      <material name="skin"/>
+    </visual>
+  </link>
+
+<!-- Right leg -->
+  <joint name="right_hip" type="continuous">
+    <parent link="body"/>
+    <child link="right_hip"/>
+    <axis xyz="0 0 1"/>
+    <origin xyz="0.0 -0.075 -0.5"/>
+  </joint>  
+
+  <link name="right_hip">
+    <visual>
+      <geometry>
+        <sphere radius="0.01"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="white"/>
+    </visual>
+  </link>
+
+  <joint name="right_hip_to_thigh" type="fixed">
+    <parent link="right_hip"/>
+    <child link="right_thigh"/>
+    <axis xyz="0 0 1"/>
+    <origin xyz="0.125 0 0"/>
+  </joint>  
+
+  <link name="right_thigh">
+    <visual>
+      <geometry>
+        <cylinder length="0.3" radius="0.05"/>
+      </geometry>
+      <origin rpy="0 1.57075 0" xyz="0 0 0"/>
+      <material name="skin"/>
+    </visual>
+  </link>
+
+  <joint name="right_thigh_to_knee" type="revolute">
+    <limit lower="0"
+         upper="2.5"
+         effort="10.0"
+         velocity="5.0" />
+    <parent link="right_thigh"/>
+    <child link="right_knee"/>
+    <origin xyz="0.15 0 0"/>
+  </joint>
+
+  <link name="right_knee">
+    <visual>
+      <geometry>
+        <sphere radius="0.01"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="white"/>
+    </visual>
+  </link>
+
+  <joint name="right_knee_to_shin" type="fixed">
+    <parent link="right_knee"/>
+    <child link="right_shin"/>
+    <axis xyz="0 0 1"/>
+    <origin xyz="0.1 0 0"/>
+  </joint>
+
+  <link name="right_shin">
+    <visual>
+      <geometry>
+        <cylinder length="0.2" radius="0.03"/>
+      </geometry>
+      <origin rpy="0 1.57075 0" xyz="0 0 0"/>
+      <material name="skin"/>
+    </visual>
+  </link>
+
+  <joint name="right_ankle" type="fixed">
+    <parent link="right_shin"/>
+    <child link="right_foot"/>
+    <axis xyz="0 0 1"/>
+    <origin xyz="0.1 0 0"/>
+  </joint>
+
+  <link name="right_foot">
+    <visual>
+      <geometry>
+        <sphere radius="0.03"/>
+      </geometry>
+      <origin rpy="0 1.57075 0" xyz="0.025 0 0"/>
+      <material name="skin"/>
+    </visual>
+  </link>
+
+<!-- Left leg -->
+  <joint name="left_hip" type="continuous">
+    <parent link="body"/>
+    <child link="left_hip"/>
+    <axis xyz="0 0 1"/>
+    <origin xyz="0.0 0.075 -0.5"/>
+  </joint>  
+
+  <link name="left_hip">
+    <visual>
+      <geometry>
+        <sphere radius="0.01"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="white"/>
+    </visual>
+  </link>
+
+  <joint name="left_hip_to_thigh" type="fixed">
+    <parent link="left_hip"/>
+    <child link="left_thigh"/>
+    <axis xyz="0 0 1"/>
+    <origin xyz="0.125 0 0"/>
+  </joint>  
+
+  <link name="left_thigh">
+    <visual>
+      <geometry>
+        <cylinder length="0.3" radius="0.05"/>
+      </geometry>
+      <origin rpy="0 1.57075 0" xyz="0 0 0"/>
+      <material name="skin"/>
+    </visual>
+  </link>
+
+  <joint name="left_thigh_to_knee" type="revolute">
+    <limit lower="0"
+         upper="2.5"
+         effort="10.0"
+         velocity="5.0" />
+    <parent link="left_thigh"/>
+    <child link="left_knee"/>
+    <origin xyz="0.15 0 0"/>
+  </joint>
+
+  <link name="left_knee">
+    <visual>
+      <geometry>
+        <sphere radius="0.01"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="white"/>
+    </visual>
+  </link>
+
+  <joint name="left_knee_to_shin" type="fixed">
+    <parent link="left_knee"/>
+    <child link="left_shin"/>
+    <axis xyz="0 0 1"/>
+    <origin xyz="0.1 0 0"/>
+  </joint>
+
+  <link name="left_shin">
+    <visual>
+      <geometry>
+        <cylinder length="0.2" radius="0.03"/>
+      </geometry>
+      <origin rpy="0 1.57075 0" xyz="0 0 0"/>
+      <material name="skin"/>
+    </visual>
+  </link>
+
+  <joint name="left_ankle" type="fixed">
+    <parent link="left_shin"/>
+    <child link="left_foot"/>
+    <axis xyz="0 0 1"/>
+    <origin xyz="0.1 0 0"/>
+  </joint>
+
+  <link name="left_foot">
+    <visual>
+      <geometry>
+        <sphere radius="0.03"/>
+      </geometry>
+      <origin rpy="0 1.57075 0" xyz="0.025 0 0"/>
+      <material name="skin"/>
+    </visual>
+  </link>
+
 </robot>
