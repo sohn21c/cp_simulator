@@ -1,4 +1,4 @@
-# Human Motion Simulator with wearable IMU sensor
+# Human Motion Simulator with Wearable IMU Sensor
 #### _[James Sohn(Click to see the portfolio)](https://sohn21c.github.io)_  
 #### _Apr 2019 ~ Jun 2019_ / _Oct 2019 ~ Dec 2019_  
 #### _Last Updated: 10/14/19_
