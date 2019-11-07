@@ -1,13 +1,17 @@
-## Cerebral Palsy Simulator  
+# Human Motion Simulator with Wearable IMU Sensor
 #### _[James Sohn(Click to see the portfolio)](https://sohn21c.github.io)_  
-#### _Apr 2019 ~ Jun 2019_ / _Oct 2019 ~ Dec 2019_  
-#### _Last Updated: 10/14/19_
   
 ## Objective  
-To successfully process and reproduce the human-body motion measured by the wireless IMU sensor(acceleartion and angular velocity) to 3-D simulation in Rviz, on ROS platform
+To successfully process and reproduce the human motion measured by the wireless IMU sensor(acceleartion and angular velocity) to 3-D simulation in Rviz, on ROS platform
+
+## Contents
+1. [Background](#background)
+2. [Sensor](#sensor)
+3. [Software](#software)
+4. [Demo](#demo)
 
 ## Background
-The motivation of this project is to properly capture and reproduce the body motion of patients that are either diagnosed with Cerebral Palsy, or at risk of such diagnosis. The simulator will eventually be used to build machine learning model in an attempt to build the end-to-end system that can diagnose CP by having a personel wear sensors and take measurements.
+The motivation of this project is to properly capture and reproduce the body motion of patients that are either diagnosed with Cerebral Palsy, or at risk of such diagnosis. It is not trivial to track the target sensor in 3-d space collecting linear acceleartion and anuglar velocity without auxillary device that may help validate the position of the target.
 
 ## Sensor
 - BMI 160 Bosch Sensortec IMU
@@ -52,6 +56,6 @@ While not done:
 return position in {w}, quaternion   
 ```
 
-### Demo
+## Demo
 Shown below is the intermediate demo of the software. A person is wearing two sensors, one on the forearm and the other on the upper arm.  
 [![YouTube](https://github.com/sohn21c/cp_simulator/blob/master/pictures/demo_screenshot_1.png?raw=true)](https://youtu.be/aNzjvPvpOEo)  
