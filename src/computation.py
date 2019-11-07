@@ -1,24 +1,26 @@
 #!/usr/bin/env python
 """
-Date: 10/15/2019
 Author: James Sohn
+Laast modified: 11/07/19
 
 This module contains helper functions used for computation at each stage to find the position and rotation
 """
 # import relavant libraries
 import csv
-import rospy
 import time
 import math
 import data_parser
+import os
 import numpy as np
 import matplotlib.pyplot as plt 
+import pandas as pd
 
 # define constant
 fps = 200
 
 def R_2vect(vector_orig, vector_fin):
-    """Calculate the rotation matrix required to rotate from one vector to another.
+    """
+    Calculate the rotation matrix required to rotate from one vector to another.
 	
 	input: 
 		- vector_orig
@@ -27,9 +29,6 @@ def R_2vect(vector_orig, vector_fin):
 	output:
 		- 3x3 rotation matrix that rotate vector_orig to vector_fin
     """
-
-    # Create empty rotation matrix
-    R = np.zeros([3,3])
 
     # Convert the vectors to unit vectors.
     vector_orig = vector_orig / np.linalg.norm(vector_orig)
@@ -54,6 +53,7 @@ def R_2vect(vector_orig, vector_fin):
     sa = np.sin(angle)
 
     # Calculate the rotation matrix elements.
+    R = np.zeros([3,3])
     R[0,0] = 1.0 + (1.0 - ca)*(x**2 - 1.0)
     R[0,1] = -z*sa + (1.0 - ca)*x*y
     R[0,2] = y*sa + (1.0 - ca)*x*z
@@ -86,7 +86,7 @@ def SORA(w_x, w_y, w_z):
 	w *= 1e6
 
 	# if norm of the angular velocity is too small, return identity matrix
-	if np.linalg.norm(w) < 1e-12:
+	if np.linalg.norm(w) < 1e-3:
 		return np.identity(3)
 
 	# find the fixed rotation axis from w
@@ -112,7 +112,7 @@ def SORA(w_x, w_y, w_z):
 
 	return R
 
-def pos_rot_calculation(filename):
+def pos_rot_calculation(filename, r_start, r_end):
 	"""
 	computes the position and rotation based on the measurement
 
@@ -125,7 +125,7 @@ def pos_rot_calculation(filename):
 		z_time - axis vector at each time step
 	"""
 	# retrieve the data from the data_parser module
-	acc_x, acc_y, acc_z, gyro_x, gyro_y, gyro_z = data_parser.data_parser(filename)
+	acc_x, acc_y, acc_z, gyro_x, gyro_y, gyro_z = data_parser.data_parser(filename, start, end)
 
 	# create the data index 
 	ind = 0
@@ -242,11 +242,6 @@ def pos_rot_calculation(filename):
 		rot_time_21.append(sensor_coord_world[2,1])
 		rot_time_22.append(sensor_coord_world[2,2])
 
-		##### test
-		# # continue until key pressed and print result
-		# input("hit enter")
-		# print(sensor_coord_world)
-
 	# # position plot
 	# plot_x = np.linspace(0, 100, len(posx_time))
 	# plt.figure(3)
@@ -339,19 +334,43 @@ def pos_rot_calculation(filename):
 	return posx_time, posy_time, posz_time, rot_time_00, rot_time_01, rot_time_02, rot_time_10, rot_time_11, rot_time_12, rot_time_20,rot_time_21, rot_time_22
 
 if __name__ == '__main__':
-	try:
-		# receive command line input for file name
-		filename = input("> ")
-		filename = "/home/james/catkin_ws/src/cp_simulator/demo/" + filename
+	# receive command line input for file name
+	directory = input("> ")
+	directory = '/home/james/Documents/final_project/James/data/' + directory
+	filelist = os.listdir(directory)
+	print(filelist)
+
+	if len(filelist) == 4:
+		ur = pd.read_csv(directory+'ur.tsv', sep='\t')
+		ul = pd.read_csv(directory+'ul.tsv', sep='\t')
+		ur_t = ur['local time']
+		ul_t = ul['local time']
+		r_start, r_end = data_parser.time_sync(ur_t, ul_t)
+		l_start, l_end = 0, len(ul_t)
+		print(r_start, r_end, r_end-r_start)
+		print(l_start, l_end, l_end-l_start)
+
+	for file in filelist:
+		if file in ['ur.tsv', 'lr.tsv']:
+			start, end = r_start, r_end 
+		elif file in ['ul.tsv', 'll.tsv']:
+			start, end = l_start, l_end
+		filename = directory + file
+		simplified = filename	
+		simplified = simplified.split('/')
+		simplified = '_'.join(simplified[-3:])
+		simplified = simplified.split('.')
+		simplified = simplified[0]
 		
 		# publishes data from the file
 		posx_time, posy_time, posz_time, \
 		rot_time_00, rot_time_01, rot_time_02, \
 		rot_time_10, rot_time_11, rot_time_12, \
-		rot_time_20,rot_time_21, rot_time_22 = pos_rot_calculation(filename)
+		rot_time_20,rot_time_21, rot_time_22 = pos_rot_calculation(filename, start, end)
 
 		# write the csv file
-		with open('result.csv', mode='w') as csvwriter:
+		writefile = '../demo/{}.csv'.format(simplified)
+		with open(writefile, mode='w') as csvwriter:
 			writer = csv.writer(csvwriter, delimiter = ',')
 			for i in range(len(posx_time)):
 				writer.writerow(
@@ -360,29 +379,26 @@ if __name__ == '__main__':
 					rot_time_10[i], rot_time_11[i], rot_time_12[i], 
 					rot_time_20[i], rot_time_21[i], rot_time_22[i]])
 
-		#### test fn.vector rotation (done)
-		# a_body = np.array([1., 0., 0.])
-		# a_world = np.array([1./np.sqrt(2), 1./np.sqrt(2), 0.])
-		# RR = R_2vect(a_body, a_world)
-		# print(RR)
-		# print(np.dot(RR.T, a_world))
+	#### test fn.vector rotation (done)
+	# a_body = np.array([1., 0., 0.])
+	# a_world = np.array([1./np.sqrt(2), 1./np.sqrt(2), 0.])
+	# RR = R_2vect(a_body, a_world)
+	# print(RR)
+	# print(np.dot(RR.T, a_world))
 
-		#### test pose only(no transformation)
-		# pos_x, pos_y, pos_z = pose_only(filename)
-		# #### write the csv file
-		# with open('pose.csv', mode='w') as csvwriter:
-		# 	writer = csv.writer(csvwriter, delimiter = ',')
+	#### test pose only(no transformation)
+	# pos_x, pos_y, pos_z = pose_only(filename)
+	# #### write the csv file
+	# with open('pose.csv', mode='w') as csvwriter:
+	# 	writer = csv.writer(csvwriter, delimiter = ',')
 
-		# 	for i in range(len(pos_x)):
-		# 		writer.writerow([pos_x[i], pos_y[i], pos_z[i]])
+	# 	for i in range(len(pos_x)):
+	# 		writer.writerow([pos_x[i], pos_y[i], pos_z[i]])
 
-		##### test for rotation matrix
-		# a = np.array([1., 0., 0.])
-		# b = np.array([0., 1., 0.])
-		# rotation = rotation_mat(a, b)
-		# print (rotation)
-		# print(np.matmul(rotation, a))
-		
-
-	except rospy.ROSInterruptException:
-		pass
+	##### test for rotation matrix
+	# a = np.array([1., 0., 0.])
+	# b = np.array([0., 1., 0.])
+	# rotation = rotation_mat(a, b)
+	# print (rotation)
+	# print(np.matmul(rotation, a))
+	
