@@ -338,7 +338,7 @@ if __name__ == '__main__':
 	directory = input("> ")
 	directory = '/home/james/Documents/final_project/James/data/' + directory
 	filelist = os.listdir(directory)
-	print(filelist)
+	print('[INFO] filelist: ',filelist)
 
 	if len(filelist) == 4:
 		ur = pd.read_csv(directory+'ur.tsv', sep='\t')
@@ -347,8 +347,8 @@ if __name__ == '__main__':
 		ul_t = ul['local time']
 		r_start, r_end = data_parser.time_sync(ur_t, ul_t)
 		l_start, l_end = 0, len(ul_t)
-		print(r_start, r_end, r_end-r_start)
-		print(l_start, l_end, l_end-l_start)
+		print('[INFO] master time sync ref points: ', r_start, r_end, r_end-r_start)
+		print('[INFO] slave time sync ref points: ',l_start, l_end, l_end-l_start)
 
 	for file in filelist:
 		if file in ['ur.tsv', 'lr.tsv']:

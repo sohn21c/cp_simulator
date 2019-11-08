@@ -10,13 +10,6 @@ import csv
 import numpy as np 
 import matplotlib.pyplot as plt
 
-
-def bias_measure(filename):
-	"""
-	takes the file with stationary sensor measurements and prints bias
-	"""
-	return
-
 def time_sync(time1, time2):
 	"""
 	finds the row index to time sync the collected data and returns start and end index
@@ -28,7 +21,6 @@ def time_sync(time1, time2):
 	start = time1[ind]
 
 	return ind, ind+len(time2)
-
 
 def data_parser(filename, sensor, start, end):
 	"""
@@ -85,11 +77,11 @@ def data_parser(filename, sensor, start, end):
 				# gyro_z.append((float(row[6]) * gyro_conv))
 
 				# Angular velocity with conversion factor
-				gyro_x.append(((float(row[4]) - x_bias) * gyro_conv))
-				gyro_y.append(((float(row[4]) - y_bias) * gyro_conv))
-				gyro_z.append(((float(row[4]) - z_bias) * gyro_conv))
+				# gyro_x.append(((float(row[4]) - float(x_bias)) * gyro_conv))
+				# gyro_y.append(((float(row[5]) - float(y_bias)) * gyro_conv))
+				# gyro_z.append(((float(row[6]) - float(z_bias)) * gyro_conv))
 
-				# One can use this if sensor is not calibrated and biased
+				# # One can use this if sensor is not calibrated and biased
 				gyro_x.append((float(row[4]) - float(data[1][4])) * gyro_conv)
 				gyro_y.append((float(row[5]) - float(data[1][5])) * gyro_conv)
 				gyro_z.append((float(row[6]) - float(data[1][6])) * gyro_conv)
@@ -118,11 +110,11 @@ def data_parser(filename, sensor, start, end):
 	# plt.show()
 
 	# (optional) plot angular velocity for check
-	plot_x = np.linspace(0, 100, len(acc_x))
+	time = range(end-start)
 	plt.figure(2)
-	plt.plot(plot_x, gyro_x, 'r', label='x')
-	plt.plot(plot_x, gyro_y, 'g', label='y')
-	plt.plot(plot_x, gyro_z, 'b', label='z')
+	plt.plot(time, gyro_x, 'r', label='x')
+	plt.plot(time, gyro_y, 'g', label='y')
+	plt.plot(time, gyro_z, 'b', label='z')
 	plt.title("Angular velocity input", loc='center')
 	plt.legend(loc='upper left')
 	plt.ylabel("[rad]")
