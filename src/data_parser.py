@@ -1,6 +1,6 @@
 """
 Author: James Sohn
-Last modified: 11/07/2019
+Last modified: 11/08/2019
 
 This is the module that imports the measurement data from the .tsv created by the sensor measurements and separates data into individual containers
 """
@@ -29,7 +29,8 @@ def time_sync(time1, time2):
 
 	return ind, ind+len(time2)
 
-def data_parser(filename, start, end):
+
+def data_parser(filename, sensor, start, end):
 	"""
 	parses the measurements of accelerometer and gyroscope in 3 axes and separates them in each container
 
@@ -40,19 +41,15 @@ def data_parser(filename, start, end):
 		- acc_x, acc_y, acc_z: acceleration for each axis in m/s/s
 		- gyro_x, gyro_y, gyro_z: angular velocity w.r.t each axis in rad/s
 	"""
-	# get the CWD
-	cwd = os.getcwd()
-
-	# Define the data path for opening
-	# datapath = cwd + "/" + filename
-	datapath = filename
+	# set the sensor bias
+	x_bias, y_bias, z_bias = sensor_cfg(sensor)
 
 	# define the conversion coefficients
 	acc_conv = 8.0 / 2**16 * 9.8065
 	gyro_conv = 1000.0 / 2**16 * np.pi / 180.0
 
 	# Open the txt file with the csv reader
-	with open(datapath) as tsvfile:
+	with open(filename) as tsvfile:
 		# Define csv.reader class for parsing
 		reader = csv.reader(tsvfile, delimiter = '\t')
 
@@ -87,20 +84,10 @@ def data_parser(filename, start, end):
 				# gyro_y.append((float(row[5]) * gyro_conv))
 				# gyro_z.append((float(row[6]) * gyro_conv))
 
-				# # sensor 3 unbias with offset
-				# gyro_x.append((float(row[4]) * gyro_conv) + 0.0031)
-				# gyro_y.append((float(row[5]) * gyro_conv) + 0.1801)
-				# gyro_z.append((float(row[6]) * gyro_conv) - 0.0223)
-
-				# # sensor 4 unbias with offset
-				# gyro_x.append((float(row[4]) * gyro_conv) - 0.0164)
-				# gyro_y.append((float(row[5]) * gyro_conv) - 0.0049)
-				# gyro_z.append((float(row[6]) * gyro_conv) - 0.0004)
-
-				# sensor 7 unbias with offset
-				# gyro_x.append((float(row[4]) * gyro_conv) - 0.0027)
-				# gyro_y.append((float(row[5]) * gyro_conv) + 2100.0 * gyro_conv)
-				# gyro_z.append((float(row[6]) * gyro_conv) - 0.0466)
+				# Angular velocity with conversion factor
+				gyro_x.append(((float(row[4]) - x_bias) * gyro_conv))
+				gyro_y.append(((float(row[4]) - y_bias) * gyro_conv))
+				gyro_z.append(((float(row[4]) - z_bias) * gyro_conv))
 
 				# One can use this if sensor is not calibrated and biased
 				gyro_x.append((float(row[4]) - float(data[1][4])) * gyro_conv)
@@ -144,8 +131,44 @@ def data_parser(filename, start, end):
 
 	return acc_x, acc_y, acc_z, gyro_x, gyro_y, gyro_z
 
+
+def sensor_cfg(sensor):
+	"""
+	parses sensor configuration file and select right bias for sensor
+
+	input:
+		sensor: sensor number in string\
+
+	returns:
+		sensor_bias for each axis
+	"""
+
+	sensor_cfg = '/home/james/catkin_ws/src/cp_simulator/cfg/sensor.cfg'
+	f = open(sensor_cfg, 'r')
+	contents = f.read()
+	contents = contents.split('\n')
+
+	sensor_bias = {}
+	for line in contents:
+		items = line.split(' ')
+		if len(items) <= 1:
+			continue
+		
+		sensor_bias[items[0]] = {}
+		sensor_bias[items[0]]['x'] = items[1]
+		sensor_bias[items[0]]['y'] = items[2]
+		sensor_bias[items[0]]['z'] = items[3]
+
+	x_bias = sensor_bias[sensor]['x']
+	y_bias = sensor_bias[sensor]['y']
+	z_bias = sensor_bias[sensor]['z']
+
+	return x_bias, y_bias, z_bias
+
+
 # test
 if __name__ == '__main__':
-	directory = input('> ')
-	acc_x, acc_y, acc_z, gyro_x, gyro_y, gyro_z = data_parser(filename)
-	
+	# file = input('name of the file: > ')
+	# acc_x, acc_y, acc_z, gyro_x, gyro_y, gyro_z = data_parser(file)
+
+	sensor_cfg()

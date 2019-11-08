@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
 Author: James Sohn
-Laast modified: 11/07/19
+Laast modified: 11/09/19
 
 This module contains helper functions used for computation at each stage to find the position and rotation
 """
@@ -112,7 +112,7 @@ def SORA(w_x, w_y, w_z):
 
 	return R
 
-def pos_rot_calculation(filename, start, end):
+def pos_rot_calculation(filename, sensor, start, end):
 	"""
 	computes the position and rotation based on the measurement
 
@@ -125,7 +125,7 @@ def pos_rot_calculation(filename, start, end):
 		z_time - axis vector at each time step
 	"""
 	# retrieve the data from the data_parser module
-	acc_x, acc_y, acc_z, gyro_x, gyro_y, gyro_z = data_parser.data_parser(filename, start, end)
+	acc_x, acc_y, acc_z, gyro_x, gyro_y, gyro_z = data_parser.data_parser(filename, sensor, start, end)
 
 	# create the data index 
 	ind = 0
@@ -353,8 +353,16 @@ if __name__ == '__main__':
 	for file in filelist:
 		if file in ['ur.tsv', 'lr.tsv']:
 			start, end = r_start, r_end 
+			if file == 'ur.tsv':
+				sensor = '1'
+			else:
+				sensor = '3'
 		elif file in ['ul.tsv', 'll.tsv']:
 			start, end = l_start, l_end
+			if file == 'ul.tsv':
+				sensor = '7'
+			else:
+				sensor = '5'
 		filename = directory + file
 		simplified = filename	
 		simplified = simplified.split('/')
@@ -366,7 +374,7 @@ if __name__ == '__main__':
 		posx_time, posy_time, posz_time, \
 		rot_time_00, rot_time_01, rot_time_02, \
 		rot_time_10, rot_time_11, rot_time_12, \
-		rot_time_20,rot_time_21, rot_time_22 = pos_rot_calculation(filename, start, end)
+		rot_time_20,rot_time_21, rot_time_22 = pos_rot_calculation(filename, sensor, start, end)
 
 		# write the csv file
 		writefile = '../demo/{}.csv'.format(simplified)
