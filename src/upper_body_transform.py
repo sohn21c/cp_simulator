@@ -167,7 +167,7 @@ class Transform(object):
 					"left_knee", 
 					"left_hip")
 
-			rospy.loginfo("broadcasting %f %f %f %f" %(posQuat1[0], posQuat1[1],posQuat1[2], posQuat1[3]))
+			# rospy.loginfo("broadcasting %f %f %f %f" %(posQuat1[0], posQuat1[1],posQuat1[2], posQuat1[3]))
 
 			# increment the index for next time step
 			ind += 1

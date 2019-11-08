@@ -112,7 +112,7 @@ def SORA(w_x, w_y, w_z):
 
 	return R
 
-def pos_rot_calculation(filename, r_start, r_end):
+def pos_rot_calculation(filename, start, end):
 	"""
 	computes the position and rotation based on the measurement
 
