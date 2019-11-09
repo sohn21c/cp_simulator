@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
 Author: James Sohn
-Last Modified: 11/07/2019
+Last Modified: 11/09/2019
 
 This is a node script to read position and angle data from .csv files and convert them to human-like geometry in Rviz
 """
@@ -75,6 +75,16 @@ class Transform(object):
 		# index
 		ind = 0
 
+		# default oritentation for sensors
+		posQuat1 = (-0.707, 0., 0.707, 0.)
+		posQuat2 = (0., 0., 0., 1.)
+		posQuat3 = (-0.707, 0., 0.707, 0.)
+		posQuat4 = (0., 0., 0., 1.)
+		posQuat5 = (-0.707, 0., 0.707, 0.)
+		posQuat6 = (0., 0., 0., 1.)
+		posQuat7 = (-0.707, 0., 0.707, 0.)
+		posQuat8 = (0., 0., 0., 1.)
+
 		while not rospy.is_shutdown():
 			# step increase the index and rewind when maxed
 			if ind == len(self._posx1) - 1:
@@ -89,14 +99,26 @@ class Transform(object):
 				exec('posQuat%d = posQuat' %i)
 
 			# convert rotational matrix relative to the world frame detached from the link in between
-			quatinv = list(posQuat1)	# right arm
-			quatinv[3] *= -1.0
-			posQuat2 = quaternion_multiply(quatinv, posQuat2)
+			if self.num_sensors > 1:
+				quatinv = list(posQuat1)	# right arm
+				quatinv[3] *= -1.0
+				posQuat2 = quaternion_multiply(quatinv, posQuat2)
 
-			quatinv2 = list(posQuat3)	# left arm
-			quatinv2[3] *= -1.0
-			posQuat4 = quaternion_multiply(quatinv2, posQuat4)
+			elif self.num_sensors > 3:
+				quatinv3 = list(posQuat3)	# left arm
+				quatinv3[3] *= -1.0
+				posQuat4 = quaternion_multiply(quatinv3, posQuat4)
 			
+			elif self.num_sensors > 5:
+				quatinv5 = list(posQuat5)	# right arm
+				quatinv5[3] *= -1.0
+				posQuat6 = quaternion_multiply(quatinv5, posQuat6)
+
+			elif self.num_sensors > 7:
+				quatinv7 = list(posQuat7)	# right arm
+				quatinv7[3] *= -1.0
+				posQuat8 = quaternion_multiply(quatinv7, posQuat8)
+
 			# broadcast to tf
 			# RVIZ axis flipped to real axis. All axis multiplied by (-1)
 			# body
@@ -139,30 +161,30 @@ class Transform(object):
 			# right leg
 			self._br.sendTransform(
 					(0., 0.075, -0.5),	
-					# (posQuat5[0], posQuat5[1], posQuat5[2], posQuat5[3]), 
-					(-0.707, 0., 0.707, 0.), 
+					(posQuat5[0], posQuat5[1], posQuat5[2], posQuat5[3]), 
+					# (-0.707, 0., 0.707, 0.), 
 					rospy.Time.now(), 
 					"right_hip", 
 					"body")
 			self._br.sendTransform(
 					(0.275, 0., 0.),	
-					# (posQuat6[0], posQuat6[1], posQuat6[2], posQuat6[3]), 
-					(0., 0., 0., 1.),
+					(posQuat6[0], posQuat6[1], posQuat6[2], posQuat6[3]), 
+					# (0., 0., 0., 1.),
 					rospy.Time.now(), 
 					"right_knee", 
 					"right_hip")
 			# left leg
 			self._br.sendTransform(
 					(0., -0.075, -0.5),	
-					# (posQuat7[0], posQuat7[1], posQuat7[2], posQuat7[3]), 
-					(0., 0., 0., 1.),
+					(posQuat7[0], posQuat7[1], posQuat7[2], posQuat7[3]), 
+					# (0., 0., 0., 1.),
 					rospy.Time.now(), 
 					"left_hip", 
 					"body")
 			self._br.sendTransform(
 					(0.275, 0., 0.),	
-					# (posQuat8[0], posQuat8[1], posQuat8[2], posQuat8[3]), 
-					(-0.707, 0., 0.707, 0.), 
+					(posQuat8[0], posQuat8[1], posQuat8[2], posQuat8[3]), 
+					# (-0.707, 0., 0.707, 0.), 
 					rospy.Time.now(), 
 					"left_knee", 
 					"left_hip")
@@ -179,14 +201,18 @@ class Transform(object):
 def main():
 	# instantiate the Transform class	
 	# filename = raw_input("filename > ")
-	filename1 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "110619_run1_ur.csv"
-	filename2 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "110619_run1_lr.csv"
-	filename3 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "110619_run1_ul.csv"
-	filename4 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "110619_run1_ll.csv"
-	transform = Transform(num_sensors=4)
-	transform.get_pose(filename1, filename2, filename3, filename4)
-	transform.tf_broadcast()
+	# filename1 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "110619_run1_ur.csv"
+	# filename2 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "110619_run1_lr.csv"
+	# filename3 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "110619_run1_ul.csv"
+	# filename4 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "110619_run1_ll.csv"
+	# transform = Transform(num_sensors=4)
+	# transform.get_pose(filename1, filename2, filename3, filename4)
+	# transform.tf_broadcast()
 
+	filename1 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "110919_run3_ur.csv"
+	transform = Transform(num_sensors=1)
+	transform.get_pose(filename1)
+	transform.tf_broadcast()
 	rospy.spin()
 
 if __name__ == '__main__':

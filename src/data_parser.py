@@ -10,6 +10,55 @@ import csv
 import numpy as np 
 import matplotlib.pyplot as plt
 
+def sensor_cfg(sensor):
+	"""
+	parses sensor configuration file and select right bias for sensor
+
+	input:
+		sensor: sensor number in string\
+
+	returns:
+		sensor_bias for each axis
+	"""
+	sensor_cfg = '/home/james/catkin_ws/src/cp_simulator/cfg/sensor.cfg'
+	f = open(sensor_cfg, 'r')
+	contents = f.read()
+	contents = contents.split('\n')
+
+	sensor_bias = {}
+	for line in contents:
+		items = line.split(' ')
+		if len(items) <= 1:
+			continue
+		
+		sensor_bias[items[0]] = {}
+		sensor_bias[items[0]]['x'] = items[1]
+		sensor_bias[items[0]]['y'] = items[2]
+		sensor_bias[items[0]]['z'] = items[3]
+
+	x_bias = sensor_bias[sensor]['x']
+	y_bias = sensor_bias[sensor]['y']
+	z_bias = sensor_bias[sensor]['z']
+
+	return x_bias, y_bias, z_bias
+	
+def smooth(x, window_len=11, window='hanning'):
+	"""
+	smoothes the data using and moving window
+
+	window_len: has to be odd integer
+	"""
+	print('[INFO] original length: ', len(x))
+	s = np.r_[x[window_len-1:0:-1],x,x[-2:-window_len-1:-1]]
+	if window == 'flat':
+		w = np.ones(window_len,'d')
+	else:
+		w = eval('np.'+window+'(window_len)')
+	y = np.convolve(w/w.sum(), s, mode='valid')
+	print('[INFO] processed length: ', len(y))
+	
+	return y
+
 def time_sync(time1, time2):
 	"""
 	finds the row index to time sync the collected data and returns start and end index
@@ -35,22 +84,17 @@ def data_parser(filename, sensor, start, end):
 	"""
 	# set the sensor bias
 	x_bias, y_bias, z_bias = sensor_cfg(sensor)
-
 	# define the conversion coefficients
 	acc_conv = 8.0 / 2**16 * 9.8065
 	gyro_conv = 1000.0 / 2**16 * np.pi / 180.0
-
 	# Open the txt file with the csv reader
 	with open(filename) as tsvfile:
 		# Define csv.reader class for parsing
 		reader = csv.reader(tsvfile, delimiter = '\t')
-
 		# List-ify the incoming file
 		data = list(reader)
-
 		# Store the header file
 		header = data[0]
-
 		# Initiate the container for each data point
 		time_stamp = []
 		acc_x = []
@@ -60,7 +104,6 @@ def data_parser(filename, sensor, start, end):
 		gyro_y = []
 		gyro_z = []
 		ind = 0
-
 		# Parse each line and store the data in each container
 		for row in data[1:]:
 			if ind >= start and ind < end:
@@ -69,14 +112,12 @@ def data_parser(filename, sensor, start, end):
 				# Acceleartion with conversion factor
 				acc_x.append(float(row[1]) * acc_conv)	
 				acc_y.append(float(row[2]) * acc_conv)
-				acc_z.append(float(row[3]) * acc_conv)
-				
+				acc_z.append(float(row[3]) * acc_conv)				
 				# # Angular velocity with conversion factor
 				# gyro_x.append((float(row[4]) * gyro_conv))
 				# gyro_y.append((float(row[5]) * gyro_conv))
 				# gyro_z.append((float(row[6]) * gyro_conv))
-
-				# Angular velocity with conversion factor
+				# Angular velocity minus bias values with conversion factor
 				# gyro_x.append(((float(row[4]) - float(x_bias)) * gyro_conv))
 				# gyro_y.append(((float(row[5]) - float(y_bias)) * gyro_conv))
 				# gyro_z.append(((float(row[6]) - float(z_bias)) * gyro_conv))
@@ -85,7 +126,6 @@ def data_parser(filename, sensor, start, end):
 				gyro_x.append((float(row[4]) - float(data[1][4])) * gyro_conv)
 				gyro_y.append((float(row[5]) - float(data[1][5])) * gyro_conv)
 				gyro_z.append((float(row[6]) - float(data[1][6])) * gyro_conv)
-
 			ind += 1
 
 	# (optional) print out average for grvity measurement
@@ -122,41 +162,6 @@ def data_parser(filename, sensor, start, end):
 	plt.show()
 
 	return acc_x, acc_y, acc_z, gyro_x, gyro_y, gyro_z
-
-
-def sensor_cfg(sensor):
-	"""
-	parses sensor configuration file and select right bias for sensor
-
-	input:
-		sensor: sensor number in string\
-
-	returns:
-		sensor_bias for each axis
-	"""
-
-	sensor_cfg = '/home/james/catkin_ws/src/cp_simulator/cfg/sensor.cfg'
-	f = open(sensor_cfg, 'r')
-	contents = f.read()
-	contents = contents.split('\n')
-
-	sensor_bias = {}
-	for line in contents:
-		items = line.split(' ')
-		if len(items) <= 1:
-			continue
-		
-		sensor_bias[items[0]] = {}
-		sensor_bias[items[0]]['x'] = items[1]
-		sensor_bias[items[0]]['y'] = items[2]
-		sensor_bias[items[0]]['z'] = items[3]
-
-	x_bias = sensor_bias[sensor]['x']
-	y_bias = sensor_bias[sensor]['y']
-	z_bias = sensor_bias[sensor]['z']
-
-	return x_bias, y_bias, z_bias
-
 
 # test
 if __name__ == '__main__':

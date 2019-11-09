@@ -29,29 +29,23 @@ def R_2vect(vector_orig, vector_fin):
 	output:
 		- 3x3 rotation matrix that rotate vector_orig to vector_fin
     """
-
     # Convert the vectors to unit vectors.
     vector_orig = vector_orig / np.linalg.norm(vector_orig)
     vector_fin = vector_fin / np.linalg.norm(vector_fin)
-
     # The rotation axis (normalised).
     axis = np.cross(vector_orig, vector_fin)
     axis_len = np.linalg.norm(axis)
     if axis_len != 0.0:
         axis = axis / axis_len
-
     # Alias the axis coordinates.
     x = axis[0]
     y = axis[1]
     z = axis[2]
-
     # The rotation angle.
     angle = math.acos(np.dot(vector_orig, vector_fin))
-
     # Trig functions (only need to do this maths once!).
     ca = np.cos(angle)
     sa = np.sin(angle)
-
     # Calculate the rotation matrix elements.
     R = np.zeros([3,3])
     R[0,0] = 1.0 + (1.0 - ca)*(x**2 - 1.0)
@@ -81,23 +75,17 @@ def SORA(w_x, w_y, w_z):
 	"""
 	# define the array of w
 	w = np.array([w_x, w_y, w_z])
-
 	# scale up the w to avoid forcing norm to be zero
 	w *= 1e6
-
 	# if norm of the angular velocity is too small, return identity matrix
 	if np.linalg.norm(w) < 1e-3:
 		return np.identity(3)
-
 	# find the fixed rotation axis from w
 	v_x, v_y, v_z = w / np.linalg.norm(w)
-
 	# scale back down the w
 	w /= 1e6
-
 	# calculate the amount of rotation psi, norm of angluar velocity multiplied by the period of measurement
 	psi = np.linalg.norm(w) * (1.0/fps)
-
 	# compute the elements
 	R = np.zeros([3,3])
 	R[0,0] = np.cos(psi) + v_x**2 * (1-np.cos(psi))
@@ -126,7 +114,6 @@ def pos_rot_calculation(filename, sensor, start, end):
 	"""
 	# retrieve the data from the data_parser module
 	acc_x, acc_y, acc_z, gyro_x, gyro_y, gyro_z = data_parser.data_parser(filename, sensor, start, end)
-
 	# create the data index 
 	ind = 0
 
@@ -134,12 +121,10 @@ def pos_rot_calculation(filename, sensor, start, end):
 	acc_x_init = acc_x[0]
 	acc_y_init = acc_y[0]
 	acc_z_init = acc_z[0]
-
 	# initial acceleartion measurement, averaged from the first 50 measurements (.25sec)
 	# acc_x_init = np.average(acc_x[0:10])
 	# acc_y_init = np.average(acc_y[0:10])
 	# acc_z_init = np.average(acc_z[0:10])
-
 	# # initial acceleartion measurement, max from the first 50 measurements (.25sec)
 	# acc_x_init = np.max(acc_x[0:25])
 	# acc_y_init = np.max(acc_y[0:25])
@@ -147,31 +132,24 @@ def pos_rot_calculation(filename, sensor, start, end):
 
 	# compute gravity
 	init_gravity = np.sqrt(acc_x_init**2 + acc_y_init**2 + acc_z_init**2)
-
 	# gravity in z direction in world frame
 	gravity_worldframe = np.array([0., 0., -init_gravity])
-
 	# initial gravity in body frame
 	init_gravity_bodyframe = np.array([acc_x_init, acc_y_init, acc_z_init])
-
 	# find rotation matrix rotating bodyframe to world frame
 	RR = R_2vect(init_gravity_bodyframe, gravity_worldframe)
-
-	# frame
+	# initial frame
 	x_abs = np.array([1., 0., 0.])
 	y_abs = np.array([0., 1., 0.])
 	z_abs = np.array([0., 0., 1.])
+	# initial coordinate WF
 	identity_coord_body = np.array([[1., 0., 0.], [0., 1., 0.], [0., 0., 1.]])
-
 	# find sensor coordinate in world frame
 	sensor_coord_world = np.dot(RR, identity_coord_body)
-
 	# define the initial velocity in world frame
 	vel_world = np.array([0., 0., 0.])
-
 	# define the initial position in world frame
 	pos_world = np.array([0., 0., 0.])
-
 	# containers for pose and orientation
 	posx_time = []
 	posy_time = []
@@ -189,43 +167,32 @@ def pos_rot_calculation(filename, sensor, start, end):
 	acc_mag_time = []
 	acc_mag_diff_time = []
 	acc_mag_copy = 0.0
-
 	# iterate through the measurement and update the position and orientation of the frame
 	for i in range(len(acc_x)):
 		# acceleration in array form at instant time step
 		acc_body = np.array([acc_x[i], acc_y[i], acc_z[i]])
-
 		# rotate the body frame acceleartion to world frame
 		acc_world = np.dot(RR, acc_body)
-		
 		# subtract the gravitational acceleration. g in -z axis
 		acc_world -= np.array([0, 0, -init_gravity])
-
 		# integerate acceleartion to get velocity in world frame
 		vel_world += acc_world * (1.0/fps)
-
 		# integrate velocity to get position in wolrd frame
 		pos_world += vel_world * (1.0/fps)
-
 		# body frame rotation matrix from gyro measurement
 		Rot_body = SORA(gyro_x[i], gyro_y[i], gyro_z[i])
-
 		# find the next body frame with the Rot_body
 		sensor_coord_world = np.dot(sensor_coord_world, Rot_body)
-	
 		# print statement for intermediate value check
 		if i % 20 == 0:
 			# print(acc_world)
 			continue
-
 		# update the Rotation matrix for world frame representation
 		RR = np.dot(RR, Rot_body)
-
 		# test the moving average and find stationary
 		if i < len(acc_x) - 1:
 			acc_mag_diff_time.append(np.linalg.norm(acc_world)-acc_mag_copy)
 			acc_mag_copy = np.linalg.norm(acc_world)
-
 		# append data point to container for plot
 		acc_mag_time.append(np.linalg.norm(acc_world))
 		acc_world_time.append(acc_world)
@@ -338,8 +305,9 @@ if __name__ == '__main__':
 	directory = input("> ")
 	directory = '/home/james/Documents/final_project/James/data/' + directory
 	filelist = os.listdir(directory)
-	print('[INFO] filelist: ',filelist)
+	print('[INFO] Filelist: ',filelist)
 
+	# time sync using more than two sets
 	if len(filelist) == 4:
 		ur = pd.read_csv(directory+'ur.tsv', sep='\t')
 		ul = pd.read_csv(directory+'ul.tsv', sep='\t')
@@ -347,22 +315,33 @@ if __name__ == '__main__':
 		ul_t = ul['local time']
 		r_start, r_end = data_parser.time_sync(ur_t, ul_t)
 		l_start, l_end = 0, len(ul_t)
-		print('[INFO] master time sync ref points: ', r_start, r_end, r_end-r_start)
-		print('[INFO] slave time sync ref points: ',l_start, l_end, l_end-l_start)
+		print('[INFO] Master time sync ref points: ', r_start, r_end, r_end-r_start)
+		print('[INFO] Slave time sync ref points: ',l_start, l_end, l_end-l_start)
 
 	for file in filelist:
-		if file in ['ur.tsv', 'lr.tsv']:
-			start, end = r_start, r_end 
+		try:
+			if file in ['ur.tsv', 'lr.tsv']:
+				start, end = r_start, r_end 
+				if file == 'ur.tsv':
+					sensor = '1'
+				else:
+					sensor = '3'
+			elif file in ['ul.tsv', 'll.tsv']:
+				start, end = l_start, l_end
+				if file == 'ul.tsv':
+					sensor = '7'
+				else:
+					sensor = '5'
+		except NameError:
+			print("[INFO] Two sensors or less used")
+			ur = pd.read_csv(directory+'ur.tsv', sep='\t')
+			start = 0
+			end = len(ur)
 			if file == 'ur.tsv':
 				sensor = '1'
 			else:
 				sensor = '3'
-		elif file in ['ul.tsv', 'll.tsv']:
-			start, end = l_start, l_end
-			if file == 'ul.tsv':
-				sensor = '7'
-			else:
-				sensor = '5'
+
 		filename = directory + file
 		simplified = filename	
 		simplified = simplified.split('/')
@@ -399,7 +378,6 @@ if __name__ == '__main__':
 	# #### write the csv file
 	# with open('pose.csv', mode='w') as csvwriter:
 	# 	writer = csv.writer(csvwriter, delimiter = ',')
-
 	# 	for i in range(len(pos_x)):
 	# 		writer.writerow([pos_x[i], pos_y[i], pos_z[i]])
 
