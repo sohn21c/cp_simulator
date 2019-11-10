@@ -12,6 +12,18 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from scipy.signal import butter, lfilter
 
+def butter_bandpass(lowcut, highcut, fs, order=5):
+    nyq = 0.5 * fs
+    low = lowcut / nyq
+    high = highcut / nyq
+    b, a = butter(order, [low, high], btype='band')
+    return b, a
+
+def butter_bandpass_filter(data, lowcut, highcut, fs, order=5):
+    b, a = butter_bandpass(lowcut, highcut, fs, order=order)
+    y = lfilter(b, a, data)
+    return y
+
 def butter_lowpass(highcut, fs, order=5):
     nyq = 0.5 * fs
     high = highcut / nyq
@@ -101,14 +113,18 @@ def data_parser2(filename, sensor, start, end):
 	gyro_x -= gyro_x[1000]
 	gyro_y -= gyro_y[1000]
 	gyro_z -= gyro_z[1000]
-	# process data points
-	lc = 0.0001
-	hc = 10.
+	# low pass filter data points
+	lc = 0.0035
+	hc = 20.
 	fs = 200.
-	order = 3
-	gyro_x = butter_lowpass_filter(gyro_x, hc, fs, order)
-	gyro_y = butter_lowpass_filter(gyro_y, hc, fs, order)
-	gyro_z = butter_lowpass_filter(gyro_z, hc, fs, order)
+	order = 1
+	# gyro_x = butter_lowpass_filter(gyro_x, hc, fs, order)
+	# gyro_y = butter_lowpass_filter(gyro_y, hc, fs, order)
+	# gyro_z = butter_lowpass_filter(gyro_z, hc, fs, order)
+	gyro_x = butter_bandpass_filter(gyro_x, lc, hc, fs, order)
+	gyro_y = butter_bandpass_filter(gyro_y, lc, hc, fs, order)
+	gyro_z = butter_bandpass_filter(gyro_z, lc, hc, fs, order)
+	# convert data
 	acc_x *= acc_conv
 	acc_y *= acc_conv
 	acc_z *= acc_conv
