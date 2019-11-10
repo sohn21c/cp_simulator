@@ -9,6 +9,19 @@ import os
 import csv
 import numpy as np 
 import matplotlib.pyplot as plt
+import pandas as pd
+from scipy.signal import butter, lfilter
+
+def butter_lowpass(highcut, fs, order=5):
+    nyq = 0.5 * fs
+    high = highcut / nyq
+    b, a = butter(order, high, btype='low')
+    return b, a
+
+def butter_lowpass_filter(data, highcut, fs, order=5):
+    b, a = butter_lowpass(highcut, fs, order=order)
+    y = lfilter(b, a, data)
+    return y	
 
 def sensor_cfg(sensor):
 	"""
@@ -71,6 +84,55 @@ def time_sync(time1, time2):
 
 	return ind, ind+len(time2)
 
+def data_parser2(filename, sensor, start, end):
+	# define the conversion coefficients
+	acc_conv = 8.0 / 2**16 * 9.8065
+	gyro_conv = 1000.0 / 2**16 * np.pi / 180.0
+	# read dataframe
+	df = pd.read_csv(filename, sep='\t') 
+	time_stamp = df['local time']
+	acc_x = df['accel x']
+	acc_y = df['accel y']
+	acc_z = df['accel z']
+	gyro_x = df['gyro x']
+	gyro_y = df['gyro y']
+	gyro_z = df['gyro z']
+	# unbias the data
+	gyro_x -= gyro_x[1000]
+	gyro_y -= gyro_y[1000]
+	gyro_z -= gyro_z[1000]
+	# process data points
+	lc = 0.0001
+	hc = 10.
+	fs = 200.
+	order = 3
+	gyro_x = butter_lowpass_filter(gyro_x, hc, fs, order)
+	gyro_y = butter_lowpass_filter(gyro_y, hc, fs, order)
+	gyro_z = butter_lowpass_filter(gyro_z, hc, fs, order)
+	acc_x *= acc_conv
+	acc_y *= acc_conv
+	acc_z *= acc_conv
+	gyro_x *= gyro_conv 
+	gyro_y *= gyro_conv
+	gyro_z *= gyro_conv
+	acc_x = acc_x[start:end].reset_index()['accel x']
+	acc_y = acc_y[start:end].reset_index()['accel y']
+	acc_z = acc_z[start:end].reset_index()['accel z']
+	gyro_x = gyro_x[start:end]
+	gyro_y = gyro_y[start:end]
+	gyro_z = gyro_z[start:end]
+
+	# (optional) plot gyro data
+	plt.figure(1)
+	time = range(len(gyro_x))
+	plt.plot(time, gyro_x, 'r', label='x')
+	plt.plot(time, gyro_y, 'g', label='y')
+	plt.plot(time, gyro_z, 'b', label='z')
+	plt.title(f'Sensor {sensor} Gyro vs Time')
+	plt.show()
+
+	return acc_x, acc_y, acc_z, gyro_x, gyro_y, gyro_z
+
 def data_parser(filename, sensor, start, end):
 	"""
 	parses the measurements of accelerometer and gyroscope in 3 axes and separates them in each container
@@ -128,27 +190,6 @@ def data_parser(filename, sensor, start, end):
 				gyro_z.append((float(row[6]) - float(data[1][6])) * gyro_conv)
 			ind += 1
 
-	# (optional) print out average for grvity measurement
-	# gravity = (np.average(acc_x), np.average(acc_y), np.average(acc_z))
-	# print(np.average(np.linalg.norm(gravity)))
-
-	# (optional) print out average for gyro measurement 
-	# print(np.average(gyro_x))
-	# print(np.average(gyro_y))
-	# print(np.average(gyro_z))
-
-	# (optional) plot accelearation for check
-	# plot_x = np.linspace(0, 100, len(acc_x))
-	# plt.figure(1)
-	# plt.plot(plot_x, acc_x, 'r', label='x')
-	# plt.plot(plot_x, acc_y, 'g', label='y')
-	# plt.plot(plot_x, acc_z, 'b', label='z')
-	# plt.title("Linear acceleration input in sensor frame", loc='center')
-	# plt.legend(loc='upper left')
-	# plt.ylabel("[m/s/s]")
-	# plt.xlabel("Relative time")
-	# plt.show()
-
 	# (optional) plot angular velocity for check
 	time = range(end-start)
 	plt.figure(2)
@@ -165,7 +206,7 @@ def data_parser(filename, sensor, start, end):
 
 # test
 if __name__ == '__main__':
-	# file = input('name of the file: > ')
-	# acc_x, acc_y, acc_z, gyro_x, gyro_y, gyro_z = data_parser(file)
+	file = input('name of the file: > ')
+	acc_x, acc_y, acc_z, gyro_x, gyro_y, gyro_z = data_parser2(file, 0, 0, 0)
 
-	sensor_cfg()
+	# sensor_cfg()

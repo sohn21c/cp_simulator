@@ -104,17 +104,17 @@ class Transform(object):
 				quatinv[3] *= -1.0
 				posQuat2 = quaternion_multiply(quatinv, posQuat2)
 
-			elif self.num_sensors > 3:
+			if self.num_sensors > 3:
 				quatinv3 = list(posQuat3)	# left arm
 				quatinv3[3] *= -1.0
 				posQuat4 = quaternion_multiply(quatinv3, posQuat4)
 			
-			elif self.num_sensors > 5:
+			if self.num_sensors > 5:
 				quatinv5 = list(posQuat5)	# right arm
 				quatinv5[3] *= -1.0
 				posQuat6 = quaternion_multiply(quatinv5, posQuat6)
 
-			elif self.num_sensors > 7:
+			if self.num_sensors > 7:
 				quatinv7 = list(posQuat7)	# right arm
 				quatinv7[3] *= -1.0
 				posQuat8 = quaternion_multiply(quatinv7, posQuat8)
@@ -200,19 +200,19 @@ class Transform(object):
 # main
 def main():
 	# instantiate the Transform class	
-	# filename = raw_input("filename > ")
-	# filename1 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "110619_run1_ur.csv"
-	# filename2 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "110619_run1_lr.csv"
-	# filename3 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "110619_run1_ul.csv"
-	# filename4 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "110619_run1_ll.csv"
-	# transform = Transform(num_sensors=4)
-	# transform.get_pose(filename1, filename2, filename3, filename4)
-	# transform.tf_broadcast()
-
-	filename1 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "110919_run3_ur.csv"
-	transform = Transform(num_sensors=1)
-	transform.get_pose(filename1)
+	filename1 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "110619_run1_ur.csv"
+	filename2 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "110619_run1_lr.csv"
+	filename3 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "110619_run1_ul.csv"
+	filename4 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "110619_run1_ll.csv"
+	transform = Transform(num_sensors=4)
+	transform.get_pose(filename1, filename2, filename3, filename4)
 	transform.tf_broadcast()
+
+	# filename1 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "110919_run3_ur.csv"
+	# transform = Transform(num_sensors=1)
+	# transform.get_pose(filename1)
+	# transform.tf_broadcast()
+	
 	rospy.spin()
 
 if __name__ == '__main__':

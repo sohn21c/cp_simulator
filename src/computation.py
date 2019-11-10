@@ -113,7 +113,8 @@ def pos_rot_calculation(filename, sensor, start, end):
 		z_time - axis vector at each time step
 	"""
 	# retrieve the data from the data_parser module
-	acc_x, acc_y, acc_z, gyro_x, gyro_y, gyro_z = data_parser.data_parser(filename, sensor, start, end)
+	# acc_x, acc_y, acc_z, gyro_x, gyro_y, gyro_z = data_parser.data_parser(filename, sensor, start, end)
+	acc_x, acc_y, acc_z, gyro_x, gyro_y, gyro_z = data_parser.data_parser2(filename, sensor, start, end)
 	# create the data index 
 	ind = 0
 
@@ -365,6 +366,7 @@ if __name__ == '__main__':
 					rot_time_00[i], rot_time_01[i], rot_time_02[i], 
 					rot_time_10[i], rot_time_11[i], rot_time_12[i], 
 					rot_time_20[i], rot_time_21[i], rot_time_22[i]])
+	print("[INFO] Done")
 
 	#### test fn.vector rotation (done)
 	# a_body = np.array([1., 0., 0.])
