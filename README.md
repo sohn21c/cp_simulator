@@ -5,8 +5,8 @@
 The purpose of the software shared in the repo is to process measurements of the human motion collected by the group of wireless IMU sensors(acceleration and angular velocity) and reproduce such motiones represented by the numerical data points as 3-D simulation of humanoid model in Rviz, on ROS platform
 
 ## Contents
-1. [Background](#background)
-2. [Introduction](#introduction)
+1. [Introduction](#introduction)
+2. [Background Information](#background-information)
 3. [Sensor](#sensor)
 4. [Software](#software)
 5. [Challenges](#challenge)
@@ -14,8 +14,18 @@ The purpose of the software shared in the repo is to process measurements of the
 7. [Reference](#reference)
 8. [Citation](#citation)
 
-## Background
-The motivation of this project is to properly capture and reproduce the body motion of patients that are either diagnosed with Cerebral Palsy, or at risk of such diagnosis. Being able to reproduce human subject's motion in virtual environment from numerical measurements of IMU sensors can be a contribution to develop  It is not trivial to track the target sensor in 3-d space collecting linear acceleartion and anuglar velocity without auxillary device that may help validate the position of the target.
+## Introduction
+The motivation of this project is to properly capture body motion of patients that are either diagnosed with Cerebral Palsy, or at risk of such diagnosis and reproduce it in virtual environment. Being able to reproduce human subject's motion in virtual environment from numerical measurements of IMU sensors can be a stepping stone for future research endeavor, including creating machine learning model. It can also allow researchers to visualize capture motion and use it as a verification tool for sensor performance. However, it is not trivial to acculately compute the position and orientation of the target sensor in 3-d space collecting linear acceleartion and anuglar velocity without atxillary device that may help validate the position of the target. Hence, the software introduced in this repo imposes constraints in the simulation environment to address such challenges.  
+
+## Background Information
+1. Dead Reckoning  
+	The technique, estimating pose and orientatin of a sensor in the 3-d space, is known as dead reckoning. What the software, introduced in this page, does to reproduce human motion in simulation environment is essentially the same. The software has to be able to compute the update of pose and estimation of each sensor, processing the linear acceleration and angular velocity. One can find more information about dead reckoning [in this wiki page.](https://en.wikipedia.org/wiki/Dead_reckoning)  
+
+2. Robotic Operating System(ROS)
+	The ROS is a software framework that, at its core, offers a message passing interface that provides inter-process communication and is commonly referred to as a middleware. ROS is a natural choice platform for the introduced software as it'd need a platform to process a series of data in parallel and consolidate the update in visual format. One can find more information about ROS [here.](https://www.ros.org/core-components/)
+	
+3. Simultaneous Orthogonal Rotation Angle  
+	Due to the nature of the challenge to estimate the orientation of the sensor at next time step, based on current measurement of angular velocity at current time step in 3-D, sequential Euler rotation in each axis introduces systematic error as the rotation is non-commutative. Such requirement calls for simultaneous computation of rotation. One can find more information about Simultaneous Orthogonal Rotation Angle [here.](https://www.hindawi.com/journals/js/2018/9684326/)
 
 ## Sensor
 - BMI 160 Bosch Sensortec IMU
