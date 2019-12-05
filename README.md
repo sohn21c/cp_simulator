@@ -2,16 +2,20 @@
 #### _[James Sohn(Click to see the portfolio)](https://sohn21c.github.io)_  
   
 ## Objective  
-To successfully process and reproduce the human motion measured by the wireless IMU sensor(acceleartion and angular velocity) to 3-D simulation in Rviz, on ROS platform
+The purpose of the software shared in the repo is to process measurements of the human motion collected by the group of wireless IMU sensors(acceleration and angular velocity) and reproduce such motiones represented by the numerical data points as 3-D simulation of humanoid model in Rviz, on ROS platform
 
 ## Contents
 1. [Background](#background)
-2. [Sensor](#sensor)
-3. [Software](#software)
-4. [Demo](#demo)
+2. [Introduction](#introduction)
+3. [Sensor](#sensor)
+4. [Software](#software)
+5. [Challenges](#challenge)
+6. [Demo](#demo)
+7. [Reference](#reference)
+8. [Citation](#citation)
 
 ## Background
-The motivation of this project is to properly capture and reproduce the body motion of patients that are either diagnosed with Cerebral Palsy, or at risk of such diagnosis. It is not trivial to track the target sensor in 3-d space collecting linear acceleartion and anuglar velocity without auxillary device that may help validate the position of the target.
+The motivation of this project is to properly capture and reproduce the body motion of patients that are either diagnosed with Cerebral Palsy, or at risk of such diagnosis. Being able to reproduce human subject's motion in virtual environment from numerical measurements of IMU sensors can be a contribution to develop  It is not trivial to track the target sensor in 3-d space collecting linear acceleartion and anuglar velocity without auxillary device that may help validate the position of the target.
 
 ## Sensor
 - BMI 160 Bosch Sensortec IMU
@@ -59,3 +63,15 @@ return position in {w}, quaternion
 ## Demo
 Shown below is the intermediate demo of the software. A person is wearing two sensors, one on the forearm and the other on the upper arm.  
 [![YouTube](https://github.com/sohn21c/cp_simulator/blob/master/pictures/demo_screenshot_1.png?raw=true)](https://youtu.be/aNzjvPvpOEo)  
+
+## Citation
+```
+@misc{Human Motion Simulator with Wearable IMU Sensor,
+    author       = {James Sohn},
+    title        = {{Human Motion Simulator with Wearable IMU Sensor}},
+    month        = dec,
+    year         = 2019,
+    version      = {1.0},
+    url          = {https://github.com/sohn21c/cp_simulator/}
+    }
+```
