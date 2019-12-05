@@ -11,29 +11,33 @@ The purpose of the software shared in the repo is to process measurements of the
 4. [Software](#software)
 5. [Challenges](#challenge)
 6. [Demo](#demo)
-7. [Reference](#reference)
-8. [Citation](#citation)
+7. [Citation](#citation)
 
 ## Introduction
-The motivation of this project is to properly capture body motion of patients that are either diagnosed with Cerebral Palsy, or at risk of such diagnosis and reproduce it in virtual environment. Being able to reproduce human subject's motion in virtual environment from numerical measurements of IMU sensors can be a stepping stone for future research endeavor, including creating machine learning model. It can also allow researchers to visualize capture motion and use it as a verification tool for sensor performance. However, it is not trivial to acculately compute the position and orientation of the target sensor in 3-d space collecting linear acceleartion and anuglar velocity without atxillary device that may help validate the position of the target. Hence, the software introduced in this repo imposes constraints in the simulation environment to address such challenges.  
+The motivation of this project is to properly capture body motion of patients that are either diagnosed with Cerebral Palsy, or at risk of such diagnosis and reproduce it in virtual environment. Being able to reproduce human subject's motion in virtual environment from numerical measurements of IMU sensors can be a stepping stone for future research endeavor, including creating machine learning model. It can also allow researchers to visualize capture motion and use it as a verification tool for sensor performance. However, it is not trivial to acculately compute the position and orientation of the target sensor in 3-d space collecting linear acceleartion and anuglar velocity without atxillary device that may help validate the position of the target. Hence, the software introduced in this repo imposes constraints in the simulation environment to address such challengee.  
 
 ## Background Information
 1. Dead Reckoning  
 	The technique, estimating pose and orientatin of a sensor in the 3-d space, is known as dead reckoning. What the software, introduced in this page, does to reproduce human motion in simulation environment is essentially the same. The software has to be able to compute the update of pose and estimation of each sensor, processing the linear acceleration and angular velocity. One can find more information about dead reckoning [in this wiki page.](https://en.wikipedia.org/wiki/Dead_reckoning)  
 
-2. Robotic Operating System(ROS)
+2. Robotic Operating System(ROS)  
 	The ROS is a software framework that, at its core, offers a message passing interface that provides inter-process communication and is commonly referred to as a middleware. ROS is a natural choice platform for the introduced software as it'd need a platform to process a series of data in parallel and consolidate the update in visual format. One can find more information about ROS [here.](https://www.ros.org/core-components/)
 	
 3. Simultaneous Orthogonal Rotation Angle  
 	Due to the nature of the challenge to estimate the orientation of the sensor at next time step, based on current measurement of angular velocity at current time step in 3-D, sequential Euler rotation in each axis introduces systematic error as the rotation is non-commutative. Such requirement calls for simultaneous computation of rotation. One can find more information about Simultaneous Orthogonal Rotation Angle [here.](https://www.hindawi.com/journals/js/2018/9684326/)
 
 ## Sensor
-- BMI 160 Bosch Sensortec IMU
+- IMU sensor  
+	BMI 160 Bosch Sensortec IMU  
+- Device  
+	Sensor encapsulation and entire development of mechanical and electrical components of the sensor is done and provided by [Roges Research Group at Northwestern University](http://rogersgroup.northwestern.edu/)   
 
 ## Software 
 ### Package versions
 - Python 2.7.15+
 - ROS Melodic 
+
+### Software structure  
 
 ### Nodes / Helper function scripts  
 - _upper_body_transform.py(node)_:  
@@ -70,9 +74,18 @@ While not done:
 return position in {w}, quaternion   
 ```
 
+## Challenge  
+### Sensor Bias
+### Signal Processing
+
 ## Demo
+### Proof-of-concept
 Shown below is the intermediate demo of the software. A person is wearing two sensors, one on the forearm and the other on the upper arm.  
 [![YouTube](https://github.com/sohn21c/cp_simulator/blob/master/pictures/demo_screenshot_1.png?raw=true)](https://youtu.be/aNzjvPvpOEo)  
+
+### Upper body
+
+### Full body
 
 ## Citation
 ```
