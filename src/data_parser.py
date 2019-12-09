@@ -93,8 +93,9 @@ def time_sync(time1, time2):
 	while abs(ref - time1[ind]) > 5:
 		ind += 1
 	start = time1[ind]
-
+	
 	return ind, ind+len(time2)
+	# return 3580, 11570
 
 def data_parser2(filename, sensor, start, end):
 	# define the conversion coefficients
@@ -109,21 +110,21 @@ def data_parser2(filename, sensor, start, end):
 	gyro_x = df['gyro x']
 	gyro_y = df['gyro y']
 	gyro_z = df['gyro z']
-	# unbias the data
-	gyro_x -= gyro_x[1000]
-	gyro_y -= gyro_y[1000]
-	gyro_z -= gyro_z[1000]
 	# low pass filter data points
-	lc = 0.0035
-	hc = 20.
+	lc = 0.035
+	hc = 10.
 	fs = 200.
-	order = 1
-	# gyro_x = butter_lowpass_filter(gyro_x, hc, fs, order)
-	# gyro_y = butter_lowpass_filter(gyro_y, hc, fs, order)
-	# gyro_z = butter_lowpass_filter(gyro_z, hc, fs, order)
-	gyro_x = butter_bandpass_filter(gyro_x, lc, hc, fs, order)
-	gyro_y = butter_bandpass_filter(gyro_y, lc, hc, fs, order)
-	gyro_z = butter_bandpass_filter(gyro_z, lc, hc, fs, order)
+	order = 3
+	gyro_x = butter_lowpass_filter(gyro_x, hc, fs, order)
+	gyro_y = butter_lowpass_filter(gyro_y, hc, fs, order)
+	gyro_z = butter_lowpass_filter(gyro_z, hc, fs, order)
+	# gyro_x = butter_bandpass_filter(gyro_x, lc, hc, fs, order)
+	# gyro_y = butter_bandpass_filter(gyro_y, lc, hc, fs, order)
+	# gyro_z = butter_bandpass_filter(gyro_z, lc, hc, fs, order)
+	# unbias the data	
+	# gyro_x -= gyro_x[300]
+	# gyro_y -= gyro_y[300]
+	# gyro_z -= gyro_z[300]
 	# convert data
 	acc_x *= acc_conv
 	acc_y *= acc_conv
@@ -137,6 +138,9 @@ def data_parser2(filename, sensor, start, end):
 	gyro_x = gyro_x[start:end]
 	gyro_y = gyro_y[start:end]
 	gyro_z = gyro_z[start:end]
+	# gyro_x = gyro_x[start:end].reset_index()['gyro x']
+	# gyro_y = gyro_y[start:end].reset_index()['gyro y']
+	# gyro_z = gyro_z[start:end].reset_index()['gyro z']
 
 	# (optional) plot gyro data
 	plt.figure(1)

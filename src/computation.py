@@ -335,9 +335,9 @@ if __name__ == '__main__':
 					sensor = '5'
 		except NameError:
 			print("[INFO] Two sensors or less used")
-			ur = pd.read_csv(directory+'ur.tsv', sep='\t')
+			df = pd.read_csv(directory+file, sep='\t')
 			start = 0
-			end = len(ur)
+			end = len(df)
 			if file == 'ur.tsv':
 				sensor = '1'
 			else:

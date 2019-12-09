@@ -199,19 +199,20 @@ class Transform(object):
 
 # main
 def main():
-	# instantiate the Transform class	
-	filename1 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "110619_run1_ur.csv"
-	filename2 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "110619_run1_lr.csv"
-	filename3 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "110619_run1_ul.csv"
-	filename4 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "110619_run1_ll.csv"
-	transform = Transform(num_sensors=4)
-	transform.get_pose(filename1, filename2, filename3, filename4)
-	transform.tf_broadcast()
-
-	# filename1 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "110919_run3_ur.csv"
-	# transform = Transform(num_sensors=1)
-	# transform.get_pose(filename1)
+	# # instantiate the Transform class	
+	# filename1 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "111019_run8_ur.csv"
+	# filename2 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "111019_run8_lr.csv"
+	# filename3 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "111019_run8_ul.csv"
+	# filename4 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "111019_run8_ll.csv"
+	# transform = Transform(num_sensors=4)
+	# transform.get_pose(filename1, filename2, filename3, filename4)
 	# transform.tf_broadcast()
+
+	filename1 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "two_arm8_upper.csv"
+	filename2 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "two_arm8_fore.csv"
+	transform = Transform(num_sensors=1)
+	transform.get_pose(filename1)
+	transform.tf_broadcast()
 	
 	rospy.spin()
 
