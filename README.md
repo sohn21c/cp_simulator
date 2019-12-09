@@ -33,7 +33,7 @@ The sensor is encapsulated inside flexible silicone material containing IMU sens
 	[Data Sheet](https://ae-bst.resource.bosch.com/media/_tech/media/datasheets/BST-BMI160-DS000.pdf)  
 - Device  
 	Sensor encapsulation and entire development of mechanical and electrical components of the sensor is performed and provided by [Roges Research Group at Northwestern University](http://rogersgroup.northwestern.edu/)   
-![sensor](https://github.com/sohn21c/cp_simulator/img/sensor_on_body.png)  
+<img src="https://github.com/sohn21c/cp_simulator/blob/master/img/sensor_on_body.png?raw=true" alt="Sensor on body" width="300">  
 
 ## Software 
 ### Package versions
@@ -93,7 +93,7 @@ It is a well known issue that dead reckoning, estimating position and orientatio
 ### Sensor Bias and Noise
 IMU sensors carry DC bias and noise. Both were observed from plotting the trials with stationary sensor measurements as shown in the figure below. Although DC bias can be manually balanced by element-wise subtracting the individual bias values from the measurement data, it can also be addressed by conducting sensor calibration on firmware level.  
 Bias is represented as distance of solid lines for each axis of measurement from absolute zero in y-axis, and noise is represented as high frequency variation of values.  
-![bias and noise](https://github.com/sohn21c/cp_simulator/imag/bias_noise.png)
+<img src="https://github.com/sohn21c/cp_simulator/blob/master/img/bias_noise.png?raw=true" alt="Sensor on body" width="800">  
 
 ### Signal Processing
 
