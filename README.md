@@ -14,7 +14,7 @@ The purpose of the software shared in the repo is to process measurements of the
 7. [Citation](#citation)
 
 ## Introduction
-The motivation of this project is to properly capture body motion of patients that are either diagnosed with Cerebral Palsy, or at risk of such diagnosis and reproduce it in virtual environment. Being able to reproduce human subject's motion in virtual environment from numerical measurements of IMU sensors can be a stepping stone for future research endeavor, including creating machine learning model. It can also allow researchers to visualize capture motion and use it as a verification tool for sensor performance. However, it is not trivial to acculately compute the position and orientation of the target sensor in 3-d space collecting linear acceleartion and anuglar velocity without atxillary device that may help validate the position of the target. Hence, the software introduced in this repo imposes constraints in the simulation environment to address such challengee.  
+The inception of this software stems from an idea to create a ML model that can help diagnose the physical challenge, Cerebral Palsy by measuring human subject's motion with wearable IMU sensors, capable of capturing linear acceleartion and angular velocity in 3 orthogonal axis. Being a disease that hinders the motorized movement of subject's body, sensors attached to subject's limbs are to be able to properly caputre the characteristic of human motion. Aligned with such intention, the creation of simulation software that can reproduce the recorded motion of human body in virtual environment is a verification tool for the validity of the measurements. It can be further utilized to allow the conversion of human motion represented in linear accleration and angular velocity to characterize critical patterns of motion contributing to the diagnosis of Cerebral Palsy.  
 
 ## Background Information
 1. Dead Reckoning  
@@ -26,18 +26,28 @@ The motivation of this project is to properly capture body motion of patients th
 3. Simultaneous Orthogonal Rotation Angle  
 	Due to the nature of the challenge to estimate the orientation of the sensor at next time step, based on current measurement of angular velocity at current time step in 3-D, sequential Euler rotation in each axis introduces systematic error as the rotation is non-commutative. Such requirement calls for simultaneous computation of rotation. One can find more information about Simultaneous Orthogonal Rotation Angle [here.](https://www.hindawi.com/journals/js/2018/9684326/)
 
-## Sensor
+## Sensor  
+The sensor is encapsulated inside flexible silicone material containing IMU sensors. The sensor is capable of wireless charging and data transporation via bluetooth.  
 - IMU sensor  
 	BMI 160 Bosch Sensortec IMU  
+	[Data Sheet](https://ae-bst.resource.bosch.com/media/_tech/media/datasheets/BST-BMI160-DS000.pdf)  
 - Device  
-	Sensor encapsulation and entire development of mechanical and electrical components of the sensor is done and provided by [Roges Research Group at Northwestern University](http://rogersgroup.northwestern.edu/)   
+	Sensor encapsulation and entire development of mechanical and electrical components of the sensor is performed and provided by [Roges Research Group at Northwestern University](http://rogersgroup.northwestern.edu/)   
+![sensor](https://github.com/sohn21c/cp_simulator/img/sensor_on_body.png)  
 
 ## Software 
 ### Package versions
 - Python 2.7.15+
 - ROS Melodic 
 
-### Software structure  
+### Package Structure
+```
+root: ~/catkin_ws/src/cp_simulator/
+  launch/ 	: contains launch file that initiates the nodes
+  rviz/		: contains .rviz file with configured setting
+  src/		: contains python node scripts
+  urdf/		: contains Universal Robot Description Files 
+```
 
 ### Nodes / Helper function scripts  
 - _upper_body_transform.py(node)_:  
@@ -57,8 +67,8 @@ The motivation of this project is to properly capture body motion of patients th
 
 ### Algorithm  
 ```
-From initial measurement of sensor and gravity represented in world frame(0, 0, -|gravity|), get RR.  
-Sensor coordinate in world frame <- RR(dot)Identity matrix  
+From initial measurement of sensor and gravity represented in world frame({w}) (0, 0, -|gravity|), get RR(rotation mat).  
+Sensor coordinate({b}) in world frame <- RR(dot)Identity matrix  
   
 While not done:  
 
@@ -75,7 +85,16 @@ return position in {w}, quaternion
 ```
 
 ## Challenge  
-### Sensor Bias
+During the development of the software, a number of technical challenges were encountered and addressed.  
+
+### Dilemma of Dead Reckoning  
+It is a well known issue that dead reckoning, estimating position and orientation of an object, integrating the linear acceleration and angular velocity is inherently very prone to accumulation of error. There are different approaches to address the issue but it tends to involve external devices such as magnotometer or GPS. However, specific to the scope of the application, pursued by introduced software, estimation of the position and orientation can be calculated by constraining the robot model to the designed geometry. Instead of updating the position of sensor in the 3d environment by the double integration of linear acceleartion, only the orientation of the sensor is calculated by single integration of angular velocity. Body model, constrained to the URDF model, can only have one available position at the given orientation.  
+
+### Sensor Bias and Noise
+IMU sensors carry DC bias and noise. Both were observed from plotting the trials with stationary sensor measurements as shown in the figure below. Although DC bias can be manually balanced by element-wise subtracting the individual bias values from the measurement data, it can also be addressed by conducting sensor calibration on firmware level.  
+Bias is represented as distance of solid lines for each axis of measurement from absolute zero in y-axis, and noise is represented as high frequency variation of values.  
+![bias and noise](https://github.com/sohn21c/cp_simulator/imag/bias_noise.png)
+
 ### Signal Processing
 
 ## Demo
