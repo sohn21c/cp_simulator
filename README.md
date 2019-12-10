@@ -93,15 +93,22 @@ It is a well known issue that dead reckoning, estimating position and orientatio
 ### Sensor Bias and Noise
 IMU sensors carry DC bias and noise. Both were observed from plotting the trials with stationary sensor measurements as shown in the figure below. Although DC bias can be manually balanced by element-wise subtracting the individual bias values from the measurement data, it can also be addressed by conducting sensor calibration on firmware level.  
 Bias is represented as distance of solid lines for each axis of measurement from absolute zero in y-axis, and noise is represented as high frequency variation of values.  
-<img src="https://github.com/sohn21c/cp_simulator/blob/master/img/bias_noise.png?raw=true" alt="Sensor on body" width="800"> 
+<p><img src="https://github.com/sohn21c/cp_simulator/blob/master/img/bias_noise.png?raw=true" alt="Sensor on body" width="800" alighn="middle"> </p>
 
 ### Signal Processing
-<img src="https://github.com/sohn21c/cp_simulator/blob/master/img/stationary_sensor.png?raw=true" alt="Sensor on body" width="400">
-<img src="https://github.com/sohn21c/cp_simulator/blob/master/img/moving_sensor.png?raw=true" alt="Sensor on body" width="400">  
-Shown above are FFT plots of measurement of single stationary sensor and single moving sensor. First plot shows, as confirmed in the previous section, the bias signal appearing at 0Hz(DC bias). Second plot captures the FFT plot of frequency range of human motion. One can find detailed research in other scholarly articles that support the observation that relevant frequency range of human motion is between 0 - 20 Hz. Author integrated designed Low Pass Filter filtering out the noise of frequency higher than 20Hz. Frequency response plot of designed Low Pass Filter is shown below on the left. The plot shown below to the right depicts the processed signal with aforementioned filter.    
-<img src="https://github.com/sohn21c/cp_simulator/blob/master/img/lpf.png?raw=true" alt="Sensor on body" width="300">
-<img src="https://github.com/sohn21c/cp_simulator/blob/master/img/filtered.png?raw=true" alt="Sensor on body" width="500">  
-
+<div class="row">
+	<div class="column">
+		<img src="https://github.com/sohn21c/cp_simulator/blob/master/img/stationary_sensor.png?raw=true" alt="Sensor on body" width="width:50%">
+		<img src="https://github.com/sohn21c/cp_simulator/blob/master/img/moving_sensor.png?raw=true" alt="Sensor on body" width="width:50%">  
+	</div>
+</div>
+Shown above are FFT plots of measurement of single stationary sensor and single moving sensor. First plot shows, as confirmed in the previous section, the bias signal appearing at 0Hz(DC bias). Second plot captures the FFT plot of frequency range of human motion. One can find detailed research in other scholarly articles that support the observation that relevant frequency range of human motion is between 0 - 20 Hz. Author integrated designed Low Pass Filter filtering out the noise of frequency higher than 20Hz. Frequency response plot of designed Low Pass Filter is shown below on the left. The plot shown below to the right depicts the processed signal with aforementioned filter.  
+<div class="row">
+	<div class="column">
+		<img src="https://github.com/sohn21c/cp_simulator/blob/master/img/lpf.png?raw=true" alt="Sensor on body" width="width:40%">
+		<img src="https://github.com/sohn21c/cp_simulator/blob/master/img/filtered.png?raw=true" alt="Sensor on body" width="width:60%">  
+	</div>
+</div>
 
 ## Demo
 ### Proof-of-concept
