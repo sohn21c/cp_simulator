@@ -129,7 +129,13 @@ roslaunch cp_simulator upper_body_cp.launch
 &nbsp;&nbsp;&nbsp;&nbsp;Shown below is the demo of collection performed with two sensors as an initial prototype. A person in the demo is wearing two wireless IMU sensors, one on the forearm and the other on the upper arm. One can click the image below to play the video.  
 <p><a href="https://youtu.be/aNzjvPvpOEo" target="_blank"><img src="https://github.com/sohn21c/cp_simulator/blob/master/img/demo2.png?raw=true" width="600"></a></p>
 
-#### Upper Body
+#### Upper Body 1
+&nbsp;&nbsp;&nbsp;&nbsp;Shown below is the demo of collection performed with four sensors attached on both sides of arms. A person in the demo is wearing two wireless IMU sensors each arm, one on the forearm and the other on the upper arm. One can click the image below to play the video.  
+<p><a href="https://youtu.be/haHzl5pTLXs" target="_blank"><img src="https://github.com/sohn21c/cp_simulator/blob/master/img/demo3.png?raw=true" width="600"></a></p>
+
+#### Upper Body 2
+&nbsp;&nbsp;&nbsp;&nbsp;Shown below is the demo of collection performed with four sensors attached on both sides of arms. A person in the demo is wearing two wireless IMU sensors each arm, one on the forearm and the other on the upper arm. One can click the image below to play the video.  
+<p><a href="https://youtu.be/C2R4Dv_Y2AU" target="_blank"><img src="https://github.com/sohn21c/cp_simulator/blob/master/img/demo4.png?raw=true" width="600"></a></p>  
 
 #### Full Body
 
