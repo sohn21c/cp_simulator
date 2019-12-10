@@ -93,9 +93,12 @@ It is a well known issue that dead reckoning, estimating position and orientatio
 ### Sensor Bias and Noise
 IMU sensors carry DC bias and noise. Both were observed from plotting the trials with stationary sensor measurements as shown in the figure below. Although DC bias can be manually balanced by element-wise subtracting the individual bias values from the measurement data, it can also be addressed by conducting sensor calibration on firmware level.  
 Bias is represented as distance of solid lines for each axis of measurement from absolute zero in y-axis, and noise is represented as high frequency variation of values.  
-<img src="https://github.com/sohn21c/cp_simulator/blob/master/img/bias_noise.png?raw=true" alt="Sensor on body" width="800">  
+<img src="https://github.com/sohn21c/cp_simulator/blob/master/img/bias_noise.png?raw=true" alt="Sensor on body" width="800"> 
 
 ### Signal Processing
+<img src="https://github.com/sohn21c/cp_simulator/blob/master/img/stationary_sensor.png?raw=true" alt="Sensor on body" width="300">  
+<img src="https://github.com/sohn21c/cp_simulator/blob/master/img/moving_sensor.png?raw=true" alt="Sensor on body" width="300">  
+Shown above are FFT plots of measurement of single stationary sensor and single moving sensor. First plot shows, as confirmed in the previous section, the bias signal appearing at 0Hz(DC bias). Second plot captures the FFT plot of frequency range of human motion. One can find detailed research in other scholarly articles that supports the observation that relevant frequency range of human motion is between 0 - 20 Hz. Author integrated desgned Low Pass Filter filtering out the noise of frequency higher than 20Hz. 
 
 ## Demo
 ### Proof-of-concept
