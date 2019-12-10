@@ -120,13 +120,13 @@ cd ~/catkin_ws/src/cp_simulator/
 roslaunch cp_simulator upper_body_cp.launch
 ```
 #### Proof of Concept
-&nbsp;&nbsp;&nbsp;&nbsp;Shown below is the demo of the proof of concept with the synthetic data. Such data is created to prove that the algorithm can compute the update of pose and estimation in the world frame, {w}, from iterating the data points with the previously introduced algorithm, representing the linear accelearation and angular velocity in the body frame of a sensor, {b}. Sythetic data is shown in the picture below.    
+&nbsp;&nbsp;&nbsp;&nbsp;Shown below is the demo of the proof of concept with the synthetic data. Such data is created to prove that the algorithm can compute the update of pose and estimation in the world frame, {w}, from iterating the data points with the previously introduced algorithm, representing the linear accelearation and angular velocity in the body frame of a sensor, {b}. Sythetic data is shown in the picture below and one can play the video demo by clicking the image at the bottom.    
 <p>
 	<img src=https://github.com/sohn21c/cp_simulator/blob/master/img/data.png?raw=true" width="600">
 	<a href="https://youtu.be/6-yMoOn8pzU" target="_blank"><img src="https://github.com/sohn21c/cp_simulator/blob/master/img/demo1.png?raw=true" width="600"></a></p>
 
 #### One Arm
-&nbsp;&nbsp;&nbsp;&nbsp;Shown below is the demo of the software simuated only with the two sensors as a proof of concept. A person is wearing two sensors, one on the forearm and the other on the upper arm.  
+&nbsp;&nbsp;&nbsp;&nbsp;Shown below is the demo of collection performed with two sensors as an initial prototype. A person in the demo is wearing two wireless IMU sensors, one on the forearm and the other on the upper arm. One can click the image below to play the video.  
 <p><a href="https://youtu.be/aNzjvPvpOEo" target="_blank"><img src="https://github.com/sohn21c/cp_simulator/blob/master/img/demo2.png?raw=true" width="600"></a></p>
 
 #### Upper Body
