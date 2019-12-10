@@ -1,6 +1,6 @@
 """
 Author: James Sohn
-Last modified: 11/08/2019
+Last modified: 12/10/2019
 
 This is the module that imports the measurement data from the .tsv created by the sensor measurements and separates data into individual containers
 """
@@ -95,12 +95,15 @@ def time_sync(time1, time2):
 	start = time1[ind]
 	
 	return ind, ind+len(time2)
-	# return 3580, 11570
+	# return 3580, 1157
 
 def data_parser2(filename, sensor, start, end):
+	"""
+	Simplified data_parser using pandas dataframe
+	"""
 	# define the conversion coefficients
 	acc_conv = 8.0 / 2**16 * 9.8065
-	gyro_conv = 1000.0 / 2**16 * np.pi / 180.0
+	gyro_conv = 1000.0 / 2**16 * np.pi / 180.0 / 2
 	# read dataframe
 	df = pd.read_csv(filename, sep='\t') 
 	time_stamp = df['local time']
@@ -148,7 +151,7 @@ def data_parser2(filename, sensor, start, end):
 	plt.plot(time, gyro_x, 'r', label='x')
 	plt.plot(time, gyro_y, 'g', label='y')
 	plt.plot(time, gyro_z, 'b', label='z')
-	plt.title(f'Sensor {sensor} Gyro vs Time')
+	plt.title(f'{filename.split('/')[-1]} Gyro vs Time')
 	plt.show()
 
 	return acc_x, acc_y, acc_z, gyro_x, gyro_y, gyro_z

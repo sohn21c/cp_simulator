@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
 Author: James Sohn
-Laast modified: 11/09/19
+Laast modified: 12/10/19
 
 This module contains helper functions used for computation at each stage to find the position and rotation
 """
@@ -119,13 +119,13 @@ def pos_rot_calculation(filename, sensor, start, end):
 	ind = 0
 
 	# initial gravity at t = 0
-	acc_x_init = acc_x[0]
-	acc_y_init = acc_y[0]
-	acc_z_init = acc_z[0]
+	# acc_x_init = acc_x[0]
+	# acc_y_init = acc_y[0]
+	# acc_z_init = acc_z[0]
 	# initial acceleartion measurement, averaged from the first 50 measurements (.25sec)
-	# acc_x_init = np.average(acc_x[0:10])
-	# acc_y_init = np.average(acc_y[0:10])
-	# acc_z_init = np.average(acc_z[0:10])
+	acc_x_init = np.average(acc_x[0:10])
+	acc_y_init = np.average(acc_y[0:10])
+	acc_z_init = np.average(acc_z[0:10])
 	# # initial acceleartion measurement, max from the first 50 measurements (.25sec)
 	# acc_x_init = np.max(acc_x[0:25])
 	# acc_y_init = np.max(acc_y[0:25])
@@ -297,7 +297,7 @@ def pos_rot_calculation(filename, sensor, start, end):
 	# plt.xlim(right=20, left=0)
 
 	# show plot
-	plt.show()
+	# plt.show()
 
 	return posx_time, posy_time, posz_time, rot_time_00, rot_time_01, rot_time_02, rot_time_10, rot_time_11, rot_time_12, rot_time_20,rot_time_21, rot_time_22
 
@@ -319,20 +319,51 @@ if __name__ == '__main__':
 		print('[INFO] Master time sync ref points: ', r_start, r_end, r_end-r_start)
 		print('[INFO] Slave time sync ref points: ',l_start, l_end, l_end-l_start)
 
+	if len(filelist) >= 7:
+		ur = pd.read_csv(directory+'ur.tsv', sep='\t')
+		ul = pd.read_csv(directory+'ul.tsv', sep='\t')
+		tr = pd.read_csv(directory+'tr.tsv', sep='\t')
+		tl = pd.read_csv(directory+'tl.tsv', sep='\t')
+		ur_t = ur['local time']
+		ul_t = ul['local time']
+		tr_t = tr['local time']
+		tl_t = tl['local time']
+		lLeg_start, lLeg_end = 0, len(tl_t)
+		rLeg_start, rLeg_end = data_parser.time_sync(tr_t, tl_t)
+		lArm_start, lArm_end = data_parser.time_sync(ul_t, tl_t)
+		rArm_start, rArm_end = data_parser.time_sync(ur_t, tl_t)
+		print('[INFO] Master time sync ref points: ', lLeg_start, lLeg_end, lLeg_end-lLeg_start)
+		print('[INFO] Master time sync ref points: ', rLeg_start, rLeg_end, rLeg_end-rLeg_start)
+		print('[INFO] Master time sync ref points: ', lArm_start, lArm_end, lArm_end-lArm_start)
+		print('[INFO] Master time sync ref points: ', rArm_start, rArm_end, rArm_end-rArm_start)
+
 	for file in filelist:
 		try:
 			if file in ['ur.tsv', 'lr.tsv']:
-				start, end = r_start, r_end 
+				start, end = rArm_start, rArm_end 
 				if file == 'ur.tsv':
-					sensor = '1'
+					sensor = '2'
 				else:
-					sensor = '3'
+					sensor = '1'
 			elif file in ['ul.tsv', 'll.tsv']:
-				start, end = l_start, l_end
+				start, end = lArm_start, lArm_end
 				if file == 'ul.tsv':
-					sensor = '7'
+					sensor = '4'
 				else:
 					sensor = '5'
+			elif file in ['tr.tsv', 'sr.tsv']:
+				start, end = rLeg_start, rLeg_end
+				if file == 'tr.tsv':
+					sensor = '6'
+				else:
+					sensor = '8'
+			elif file in ['tl.tsv', 'sl.tsv']:
+				start, end = lLeg_start, lLeg_end
+				if file == 'tl.tsv':
+					sensor = '9'
+				else:
+					sensor = '10'
+
 		except NameError:
 			print("[INFO] Two sensors or less used")
 			df = pd.read_csv(directory+file, sep='\t')
@@ -389,4 +420,3 @@ if __name__ == '__main__':
 	# rotation = rotation_mat(a, b)
 	# print (rotation)
 	# print(np.matmul(rotation, a))
-	
