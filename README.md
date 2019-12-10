@@ -99,6 +99,8 @@ Bias is represented as distance of solid lines for each axis of measurement from
 <div class="row">
 	<div class="column">
 		<img src="https://github.com/sohn21c/cp_simulator/blob/master/img/stationary_sensor.png?raw=true" alt="Sensor on body" width="width:50%">
+	</div>
+	<div class="column">
 		<img src="https://github.com/sohn21c/cp_simulator/blob/master/img/moving_sensor.png?raw=true" alt="Sensor on body" width="width:50%">  
 	</div>
 </div>
@@ -106,6 +108,8 @@ Shown above are FFT plots of measurement of single stationary sensor and single 
 <div class="row">
 	<div class="column">
 		<img src="https://github.com/sohn21c/cp_simulator/blob/master/img/lpf.png?raw=true" alt="Sensor on body" width="width:40%">
+	</div>
+	<div class="column">
 		<img src="https://github.com/sohn21c/cp_simulator/blob/master/img/filtered.png?raw=true" alt="Sensor on body" width="width:60%">  
 	</div>
 </div>
