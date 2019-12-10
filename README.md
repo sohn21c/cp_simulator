@@ -39,11 +39,11 @@
 
 
 ## Software 
-### Package versions
+#### Package versions
 - Python 2.7.15+
 - ROS Melodic 
 
-### Package Structure
+#### Package Structure
 ```
 root: ~/catkin_ws/src/cp_simulator/
   launch/ 	: contains launch file that initiates the nodes
@@ -52,7 +52,7 @@ root: ~/catkin_ws/src/cp_simulator/
   urdf/		: contains Universal Robot Description Files 
 ```
 
-### Nodes / Helper function scripts  
+#### Nodes / Helper function scripts  
 - _upper_body_transform.py(node)_:  
 	takes in position and so3 matrix components and broadcasts to tf topic in quaternion angle  
 	Input: .csv file(pos, so3 matrix)  
@@ -68,7 +68,7 @@ root: ~/catkin_ws/src/cp_simulator/
 	Input: 6 lists (3 acc, 3 ang_vel)  
 	Output: pos, so3 matrix  
 
-### Algorithm  
+#### Algorithm  
 ```
 From initial measurement of sensor and gravity represented in world frame({w}) (0, 0, -|gravity|), get RR(rotation mat).  
 Sensor coordinate({b}) in world frame <- RR(dot)Identity matrix  
@@ -86,7 +86,7 @@ While not done:
 
 return position in {w}, quaternion   
 ```
-### Execution Sequence
+#### Execution Sequence
 1. Run `python computation.py` with tab-spaced-value files containing 6 columns of linear acc and ang vel.  
 2. ROS launch `roslaunch cp_simulator upper_body_cp.launch` to initiate the RViz simulator  
 Refer to [Demo](#demo) to walk through the launch of demo files.  
@@ -94,17 +94,17 @@ Refer to [Demo](#demo) to walk through the launch of demo files.
 ## Challenge  
 &nbsp;&nbsp;&nbsp;&nbsp;During the development of the software, a number of technical challenges were encountered and addressed.  
 
-### Dilemma of Dead Reckoning  
+#### Dilemma of Dead Reckoning  
 &nbsp;&nbsp;&nbsp;&nbsp;It is a well known issue that dead reckoning, estimating position and orientation of an object, integrating the linear acceleration and angular velocity is inherently very prone to accumulation of error. There are different approaches to address the issue but it tends to involve external devices such as magnotometer or GPS. However, specific to the scope of the application, pursued by introduced software, estimation of the position and orientation can be calculated by constraining the robot model to the designed geometry. Instead of updating the position of sensor in the 3d environment by the double integration of linear acceleartion, only the orientation of the sensor is calculated by single integration of angular velocity. Body model, constrained to the URDF model, can only have one available position at the given orientation.  
 
-### Sensor Bias and Noise
+#### Sensor Bias and Noise
 &nbsp;&nbsp;&nbsp;&nbsp;IMU sensors carry DC bias and noise. Both were observed from plotting the trials with stationary sensor measurements as shown in the figure below. Although DC bias can be manually balanced by element-wise subtracting the individual bias values from the measurement data, it can also be addressed by conducting sensor calibration on firmware level.  
 &nbsp;&nbsp;&nbsp;&nbsp;The bias is represented as distance of solid lines for each axis of measurement from absolute zero in y-axis, and noise is represented as high frequency variation of values.  
 &nbsp;
 <p><img src="https://github.com/sohn21c/cp_simulator/blob/master/img/bias_noise.png?raw=true" alt="Sensor on body" style="width:100%"> </p>
 &nbsp;
 
-### Signal Processing
+#### Signal Processing
 <p><img src="https://github.com/sohn21c/cp_simulator/blob/master/img/pic1.png?raw=true" alt="Sensor on body" style="width:100%"></p>
 
 &nbsp;&nbsp;&nbsp;&nbsp;Shown above are FFT plots of measurement of single stationary sensor and single moving sensor. First plot shows, as confirmed in the previous section, the bias signal appearing at 0Hz(DC bias). Second plot captures the FFT plot of frequency range of human motion. One can find detailed research in other scholarly articles that support the observation that relevant frequency range of human motion is between 0 - 20 Hz. Author integrated designed Low Pass Filter filtering out the noise of frequency higher than 20Hz. Frequency response plot of designed Low Pass Filter is shown below on the left. The plot shown below to the right depicts the processed signal with aforementioned filter.  
@@ -112,24 +112,24 @@ Refer to [Demo](#demo) to walk through the launch of demo files.
 <p><img src="https://github.com/sohn21c/cp_simulator/blob/master/img/pic2.png?raw=true" alt="Sensor on body" style="width:100%"></p>
 
 ## Demo
-### How To Run Simulation
+#### How To Run Simulation
 &nbsp;&nbsp;&nbsp;&nbsp;One has to refer to [ROS.org](https://ros.org) to build the package using `catkin` before attempting to run the demo. Demo requires processed comma-separated-values files by the node `computation.py` in the dir `~/catkin_ws/src/cp_simulator/demo/`.   
 ```
 source ~/catkin_ws/devel/setup.bash
 cd ~/catkin_ws/src/cp_simulator/
 roslaunch cp_simulator upper_body_cp.launch
 ```
-### Proof of Concept
+#### Proof of Concept
 &nbsp;&nbsp;&nbsp;&nbsp;Shown below is the demo of the proof of concept and the algorithm run with the synthetic data. Such data is created to prove that the algorithm can compute the update of pose and estimation in the world frame, {w}, from iterating the data points with the previously introduced algorithm, representing the linear accelearation and angular velocity in the body frame of a sensor, {b}. Sythetic data is shown in the picture below.    
 <p><a href="https://youtu.be/6-yMoOn8pzU" target="_blank"><img src="https://github.com/sohn21c/cp_simulator/blob/master/img/demo1.png?raw=true" width="600"></a></p>
 
-### One Arm
+#### One Arm
 &nbsp;&nbsp;&nbsp;&nbsp;Shown below is the demo of the software simuated only with the two sensors as a proof of concept. A person is wearing two sensors, one on the forearm and the other on the upper arm.  
 <p><a href="https://youtu.be/aNzjvPvpOEo" target="_blank"><img src="https://github.com/sohn21c/cp_simulator/blob/master/img/demo2.png?raw=true" width="600"></a></p>
 
-### Upper Body
+#### Upper Body
 
-### Full Body
+#### Full Body
 
 ## Citation
 ```
