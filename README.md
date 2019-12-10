@@ -96,9 +96,12 @@ Bias is represented as distance of solid lines for each axis of measurement from
 <img src="https://github.com/sohn21c/cp_simulator/blob/master/img/bias_noise.png?raw=true" alt="Sensor on body" width="800"> 
 
 ### Signal Processing
-<img src="https://github.com/sohn21c/cp_simulator/blob/master/img/stationary_sensor.png?raw=true" alt="Sensor on body" width="300">  
-<img src="https://github.com/sohn21c/cp_simulator/blob/master/img/moving_sensor.png?raw=true" alt="Sensor on body" width="300">  
-Shown above are FFT plots of measurement of single stationary sensor and single moving sensor. First plot shows, as confirmed in the previous section, the bias signal appearing at 0Hz(DC bias). Second plot captures the FFT plot of frequency range of human motion. One can find detailed research in other scholarly articles that supports the observation that relevant frequency range of human motion is between 0 - 20 Hz. Author integrated desgned Low Pass Filter filtering out the noise of frequency higher than 20Hz. 
+<img src="https://github.com/sohn21c/cp_simulator/blob/master/img/stationary_sensor.png?raw=true" alt="Sensor on body" width="400">
+<img src="https://github.com/sohn21c/cp_simulator/blob/master/img/moving_sensor.png?raw=true" alt="Sensor on body" width="400">  
+Shown above are FFT plots of measurement of single stationary sensor and single moving sensor. First plot shows, as confirmed in the previous section, the bias signal appearing at 0Hz(DC bias). Second plot captures the FFT plot of frequency range of human motion. One can find detailed research in other scholarly articles that support the observation that relevant frequency range of human motion is between 0 - 20 Hz. Author integrated designed Low Pass Filter filtering out the noise of frequency higher than 20Hz. Frequency response plot of designed Low Pass Filter is shown below on the left. The plot shown below to the right depicts the processed signal with aforementioned filter.    
+<img src="https://github.com/sohn21c/cp_simulator/blob/master/img/lpf.png?raw=true" alt="Sensor on body" width="300">
+<img src="https://github.com/sohn21c/cp_simulator/blob/master/img/filtered.png?raw=true" alt="Sensor on body" width="500">  
+
 
 ## Demo
 ### Proof-of-concept
