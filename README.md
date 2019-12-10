@@ -101,20 +101,11 @@ return position in {w}, quaternion
 &nbsp;
 
 ### Signal Processing
-<div class="row">
-	<div class="column">
-		<img src="https://github.com/sohn21c/cp_simulator/blob/master/img/pic1.png?raw=true" alt="Sensor on body" style="width:100%">
-	</div>
-</div>  
-&nbsp;
+<p><img src="https://github.com/sohn21c/cp_simulator/blob/master/img/pic1.png?raw=true" alt="Sensor on body" style="width:100%"></p>
+
 &nbsp;&nbsp;&nbsp;&nbsp;Shown above are FFT plots of measurement of single stationary sensor and single moving sensor. First plot shows, as confirmed in the previous section, the bias signal appearing at 0Hz(DC bias). Second plot captures the FFT plot of frequency range of human motion. One can find detailed research in other scholarly articles that support the observation that relevant frequency range of human motion is between 0 - 20 Hz. Author integrated designed Low Pass Filter filtering out the noise of frequency higher than 20Hz. Frequency response plot of designed Low Pass Filter is shown below on the left. The plot shown below to the right depicts the processed signal with aforementioned filter.  
-&nbsp;
-<div class="row">
-	<div class="column">
-		<img src="https://github.com/sohn21c/cp_simulator/blob/master/img/pic2.png?raw=true" alt="Sensor on body" style="width:100%">
-	</div>
-</div>  
-&nbsp;
+
+<p><img src="https://github.com/sohn21c/cp_simulator/blob/master/img/pic2.png?raw=true" alt="Sensor on body" style="width:100%"></p>
 
 ## Demo
 ### Proof-of-concept
