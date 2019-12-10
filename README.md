@@ -2,7 +2,7 @@
 #### _[James Sohn(Click to see the portfolio)](https://sohn21c.github.io)_  
   
 ## Objective  
-The purpose of the software shared in the repo is to process measurements of the human motion collected by the group of wireless IMU sensors(acceleration and angular velocity) and reproduce such motiones represented by the numerical data points as 3-D simulation of humanoid model in Rviz, on ROS platform
+&nbsp;&nbsp;&nbsp;&nbsp;The purpose of the software shared in the repo is to process measurements of the human motion collected by the group of wireless IMU sensors(acceleration and angular velocity) and reproduce such motiones represented by the numerical data points as 3-D simulation of humanoid model in Rviz, on ROS platform
 
 ## Contents
 1. [Introduction](#introduction)
@@ -14,7 +14,7 @@ The purpose of the software shared in the repo is to process measurements of the
 7. [Citation](#citation)
 
 ## Introduction
-The inception of this software stems from an idea to create a ML model that can help diagnose the physical challenge, Cerebral Palsy by measuring human subject's motion with wearable IMU sensors, capable of capturing linear acceleartion and angular velocity in 3 orthogonal axis. Being a disease that hinders the motorized movement of subject's body, sensors attached to subject's limbs are to be able to properly caputre the characteristic of human motion. Aligned with such intention, the creation of simulation software that can reproduce the recorded motion of human body in virtual environment is a verification tool for the validity of the measurements. It can be further utilized to allow the conversion of human motion represented in linear accleration and angular velocity to characterize critical patterns of motion contributing to the diagnosis of Cerebral Palsy.  
+&nbsp;&nbsp;&nbsp;&nbsp;The inception of this software stems from an idea to create a ML model that can help diagnose the physical challenge, Cerebral Palsy by measuring human subject's motion with wearable IMU sensors, capable of capturing linear acceleartion and angular velocity in 3 orthogonal axis. Being a disease that hinders the motorized movement of subject's body, sensors attached to subject's limbs are to be able to properly caputre the characteristic of human motion. Aligned with such intention, the creation of simulation software that can reproduce the recorded motion of human body in virtual environment is a verification tool for the validity of the measurements. It can be further utilized to allow the conversion of human motion represented in linear accleration and angular velocity to characterize critical patterns of motion contributing to the diagnosis of Cerebral Palsy.  
 
 ## Background Information
 1. Dead Reckoning  
@@ -27,7 +27,7 @@ The inception of this software stems from an idea to create a ML model that can 
 	Due to the nature of the challenge to estimate the orientation of the sensor at next time step, based on current measurement of angular velocity at current time step in 3-D, sequential Euler rotation in each axis introduces systematic error as the rotation is non-commutative. Such requirement calls for simultaneous computation of rotation. One can find more information about Simultaneous Orthogonal Rotation Angle [here.](https://www.hindawi.com/journals/js/2018/9684326/)
 
 ## Sensor  
-The sensor is encapsulated inside flexible silicone material containing IMU sensors. The sensor is capable of wireless charging and data transporation via bluetooth.  
+&nbsp;&nbsp;&nbsp;&nbsp;The sensor is encapsulated inside flexible silicone material containing IMU sensors. The sensor is capable of wireless charging and data transporation via bluetooth.  
   
 <img src="https://github.com/sohn21c/cp_simulator/blob/master/img/sensor_on_body.png?raw=true" alt="Sensor on body" width="300">  
   
@@ -88,15 +88,17 @@ return position in {w}, quaternion
 ```
 
 ## Challenge  
-During the development of the software, a number of technical challenges were encountered and addressed.  
+&nbsp;&nbsp;&nbsp;&nbsp;During the development of the software, a number of technical challenges were encountered and addressed.  
 
 ### Dilemma of Dead Reckoning  
-It is a well known issue that dead reckoning, estimating position and orientation of an object, integrating the linear acceleration and angular velocity is inherently very prone to accumulation of error. There are different approaches to address the issue but it tends to involve external devices such as magnotometer or GPS. However, specific to the scope of the application, pursued by introduced software, estimation of the position and orientation can be calculated by constraining the robot model to the designed geometry. Instead of updating the position of sensor in the 3d environment by the double integration of linear acceleartion, only the orientation of the sensor is calculated by single integration of angular velocity. Body model, constrained to the URDF model, can only have one available position at the given orientation.  
+&nbsp;&nbsp;&nbsp;&nbsp;It is a well known issue that dead reckoning, estimating position and orientation of an object, integrating the linear acceleration and angular velocity is inherently very prone to accumulation of error. There are different approaches to address the issue but it tends to involve external devices such as magnotometer or GPS. However, specific to the scope of the application, pursued by introduced software, estimation of the position and orientation can be calculated by constraining the robot model to the designed geometry. Instead of updating the position of sensor in the 3d environment by the double integration of linear acceleartion, only the orientation of the sensor is calculated by single integration of angular velocity. Body model, constrained to the URDF model, can only have one available position at the given orientation.  
 
 ### Sensor Bias and Noise
-IMU sensors carry DC bias and noise. Both were observed from plotting the trials with stationary sensor measurements as shown in the figure below. Although DC bias can be manually balanced by element-wise subtracting the individual bias values from the measurement data, it can also be addressed by conducting sensor calibration on firmware level.  
-Bias is represented as distance of solid lines for each axis of measurement from absolute zero in y-axis, and noise is represented as high frequency variation of values.  
-<p><img src="https://github.com/sohn21c/cp_simulator/blob/master/img/bias_noise.png?raw=true" alt="Sensor on body" width="800" alighn="middle"> </p>
+&nbsp;&nbsp;&nbsp;&nbsp;IMU sensors carry DC bias and noise. Both were observed from plotting the trials with stationary sensor measurements as shown in the figure below. Although DC bias can be manually balanced by element-wise subtracting the individual bias values from the measurement data, it can also be addressed by conducting sensor calibration on firmware level.  
+&nbsp;&nbsp;&nbsp;&nbsp;The bias is represented as distance of solid lines for each axis of measurement from absolute zero in y-axis, and noise is represented as high frequency variation of values.  
+&nbsp;
+<p><img src="https://github.com/sohn21c/cp_simulator/blob/master/img/bias_noise.png?raw=true" alt="Sensor on body" style="width:100%"> </p>
+&nbsp;
 
 ### Signal Processing
 <div class="row">
@@ -104,15 +106,15 @@ Bias is represented as distance of solid lines for each axis of measurement from
 		<img src="https://github.com/sohn21c/cp_simulator/blob/master/img/pic1.png?raw=true" alt="Sensor on body" style="width:100%">
 	</div>
 </div>  
-  
-Shown above are FFT plots of measurement of single stationary sensor and single moving sensor. First plot shows, as confirmed in the previous section, the bias signal appearing at 0Hz(DC bias). Second plot captures the FFT plot of frequency range of human motion. One can find detailed research in other scholarly articles that support the observation that relevant frequency range of human motion is between 0 - 20 Hz. Author integrated designed Low Pass Filter filtering out the noise of frequency higher than 20Hz. Frequency response plot of designed Low Pass Filter is shown below on the left. The plot shown below to the right depicts the processed signal with aforementioned filter.  
-  
+&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;Shown above are FFT plots of measurement of single stationary sensor and single moving sensor. First plot shows, as confirmed in the previous section, the bias signal appearing at 0Hz(DC bias). Second plot captures the FFT plot of frequency range of human motion. One can find detailed research in other scholarly articles that support the observation that relevant frequency range of human motion is between 0 - 20 Hz. Author integrated designed Low Pass Filter filtering out the noise of frequency higher than 20Hz. Frequency response plot of designed Low Pass Filter is shown below on the left. The plot shown below to the right depicts the processed signal with aforementioned filter.  
+&nbsp;
 <div class="row">
 	<div class="column">
 		<img src="https://github.com/sohn21c/cp_simulator/blob/master/img/pic2.png?raw=true" alt="Sensor on body" style="width:100%">
 	</div>
 </div>  
-
+&nbsp;
 
 ## Demo
 ### Proof-of-concept
