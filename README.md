@@ -120,8 +120,10 @@ cd ~/catkin_ws/src/cp_simulator/
 roslaunch cp_simulator upper_body_cp.launch
 ```
 #### Proof of Concept
-&nbsp;&nbsp;&nbsp;&nbsp;Shown below is the demo of the proof of concept and the algorithm run with the synthetic data. Such data is created to prove that the algorithm can compute the update of pose and estimation in the world frame, {w}, from iterating the data points with the previously introduced algorithm, representing the linear accelearation and angular velocity in the body frame of a sensor, {b}. Sythetic data is shown in the picture below.    
-<p><a href="https://youtu.be/6-yMoOn8pzU" target="_blank"><img src="https://github.com/sohn21c/cp_simulator/blob/master/img/demo1.png?raw=true" width="600"></a></p>
+&nbsp;&nbsp;&nbsp;&nbsp;Shown below is the demo of the proof of concept with the synthetic data. Such data is created to prove that the algorithm can compute the update of pose and estimation in the world frame, {w}, from iterating the data points with the previously introduced algorithm, representing the linear accelearation and angular velocity in the body frame of a sensor, {b}. Sythetic data is shown in the picture below.    
+<p>
+	<img src=https://github.com/sohn21c/cp_simulator/blob/master/img/data.png?raw=true" width="600">
+	<a href="https://youtu.be/6-yMoOn8pzU" target="_blank"><img src="https://github.com/sohn21c/cp_simulator/blob/master/img/demo1.png?raw=true" width="600"></a></p>
 
 #### One Arm
 &nbsp;&nbsp;&nbsp;&nbsp;Shown below is the demo of the software simuated only with the two sensors as a proof of concept. A person is wearing two sensors, one on the forearm and the other on the upper arm.  
