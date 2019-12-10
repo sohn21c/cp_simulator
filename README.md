@@ -28,12 +28,15 @@ The inception of this software stems from an idea to create a ML model that can 
 
 ## Sensor  
 The sensor is encapsulated inside flexible silicone material containing IMU sensors. The sensor is capable of wireless charging and data transporation via bluetooth.  
+  
+<img src="https://github.com/sohn21c/cp_simulator/blob/master/img/sensor_on_body.png?raw=true" alt="Sensor on body" width="300">  
+  
 - IMU sensor  
 	BMI 160 Bosch Sensortec IMU  
 	[Data Sheet](https://ae-bst.resource.bosch.com/media/_tech/media/datasheets/BST-BMI160-DS000.pdf)  
 - Device  
 	Sensor encapsulation and entire development of mechanical and electrical components of the sensor is performed and provided by [Roges Research Group at Northwestern University](http://rogersgroup.northwestern.edu/)   
-<img src="https://github.com/sohn21c/cp_simulator/blob/master/img/sensor_on_body.png?raw=true" alt="Sensor on body" width="300">  
+
 
 ## Software 
 ### Package versions
@@ -100,13 +103,16 @@ Bias is represented as distance of solid lines for each axis of measurement from
 	<div class="column">
 		<img src="https://github.com/sohn21c/cp_simulator/blob/master/img/pic1.png?raw=true" alt="Sensor on body" style="width:100%">
 	</div>
-</div>
+</div>  
+  
 Shown above are FFT plots of measurement of single stationary sensor and single moving sensor. First plot shows, as confirmed in the previous section, the bias signal appearing at 0Hz(DC bias). Second plot captures the FFT plot of frequency range of human motion. One can find detailed research in other scholarly articles that support the observation that relevant frequency range of human motion is between 0 - 20 Hz. Author integrated designed Low Pass Filter filtering out the noise of frequency higher than 20Hz. Frequency response plot of designed Low Pass Filter is shown below on the left. The plot shown below to the right depicts the processed signal with aforementioned filter.  
+  
 <div class="row">
 	<div class="column">
 		<img src="https://github.com/sohn21c/cp_simulator/blob/master/img/pic2.png?raw=true" alt="Sensor on body" style="width:100%">
 	</div>
-</div>
+</div>  
+
 
 ## Demo
 ### Proof-of-concept
