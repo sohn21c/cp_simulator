@@ -86,6 +86,10 @@ While not done:
 
 return position in {w}, quaternion   
 ```
+### Execution Sequence
+1. Run `python computation.py` with tab-spaced-value files containing 6 columns of linear acc and ang vel.  
+2. ROS launch `roslaunch cp_simulator upper_body_cp.launch` to initiate the RViz simulator  
+Refer to [Demo](#demo) to walk through the launch of demo files.  
 
 ## Challenge  
 &nbsp;&nbsp;&nbsp;&nbsp;During the development of the software, a number of technical challenges were encountered and addressed.  
@@ -108,13 +112,25 @@ return position in {w}, quaternion
 <p><img src="https://github.com/sohn21c/cp_simulator/blob/master/img/pic2.png?raw=true" alt="Sensor on body" style="width:100%"></p>
 
 ## Demo
-### Proof-of-concept
-Shown below is the intermediate demo of the software. A person is wearing two sensors, one on the forearm and the other on the upper arm.  
-[![YouTube](https://github.com/sohn21c/cp_simulator/blob/master/pictures/demo_screenshot_1.png?raw=true)](https://youtu.be/aNzjvPvpOEo)  
+### How To Run Simulation
+&nbsp;&nbsp;&nbsp;&nbsp;One has to refer to [ROS.org](https://ros.org) to build the package using `catkin` before attempting to run the demo. Demo requires processed comma-separated-values files by the node `computation.py` in the dir `~/catkin_ws/src/cp_simulator/demo/`.   
+```
+source ~/catkin_ws/devel/setup.bash
+cd ~/catkin_ws/src/cp_simulator/
+roslaunch cp_simulator upper_body_cp.launch
+```
+### Proof of Concept
+&nbsp;&nbsp;&nbsp;&nbsp;Shown below is the demo of the proof of concept and the algorithm run with the synthetic data. Such data is created to prove that the algorithm can compute the update of pose and estimation in the world frame, {w}, from iterating the data points with the previously introduced algorithm, representing the linear accelearation and angular velocity in the body frame of a sensor, {b}. Sythetic data is shown in the picture below.    
+<p><img src="https://github.com/sohn21c/cp_simulator/blob/master/img/data.png?raw=true" alt="Sensor on body" style="width:100%"></p>
+<p>[![YouTube](https://github.com/sohn21c/cp_simulator/blob/master/pictures/demo_screenshot_1.png?raw=true)](https://youtu.be/6-yMoOn8pzU)</p>  
 
-### Upper body
+### One Arm
+&nbsp;&nbsp;&nbsp;&nbsp;Shown below is the demo of the software simuated only with the two sensors as a proof of concept. A person is wearing two sensors, one on the forearm and the other on the upper arm.  
+<p><a href="https://youtu.be/aNzjvPvpOEo" target="_blank"><img src="https://github.com/sohn21c/cp_simulator/blob/master/pictures/demo_screenshot_1.png?raw=true" width="600"></a></p>
 
-### Full body
+### Upper Body
+
+### Full Body
 
 ## Citation
 ```
