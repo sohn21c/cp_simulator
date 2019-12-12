@@ -123,21 +123,27 @@ roslaunch cp_simulator upper_body_cp.launch
 &nbsp;&nbsp;&nbsp;&nbsp;Shown below is the demo of the proof of concept with the synthetic data. Such data is created to prove that the algorithm can compute the update of pose and estimation in the world frame, {w}, from iterating the data points with the previously introduced algorithm, representing the linear accelearation and angular velocity in the body frame of a sensor, {b}. Sythetic data is shown in the picture below and one can play the video demo by clicking the image at the bottom.    
 <p>
 	<img src=https://github.com/sohn21c/cp_simulator/blob/master/img/data.png?raw=true" width="600">
-	<a href="https://youtu.be/6-yMoOn8pzU" target="_blank"><img src="https://github.com/sohn21c/cp_simulator/blob/master/img/demo1.png?raw=true" width="600"></a></p>
+	<a href="https://youtu.be/ek24Xh2Kkec" target="_blank"><img src="https://github.com/sohn21c/cp_simulator/blob/master/img/demo1.png?raw=true" width="600"></a></p>
 
 #### One Arm
-&nbsp;&nbsp;&nbsp;&nbsp;Shown below is the demo of collection performed with two sensors as an initial prototype. A person in the demo is wearing two wireless IMU sensors, one on the forearm and the other on the upper arm. One can click the image below to play the video.  
+&nbsp;&nbsp;&nbsp;&nbsp;Shown below is the demo of collection performed with **two** sensors as an initial prototype. A person in the demo is wearing two wireless IMU sensors, one on the forearm and the other on the upper arm. One can click the image below to play the video.  
 <p><a href="https://youtu.be/aNzjvPvpOEo" target="_blank"><img src="https://github.com/sohn21c/cp_simulator/blob/master/img/demo2.png?raw=true" width="600"></a></p>
 
 #### Upper Body 1
-&nbsp;&nbsp;&nbsp;&nbsp;Shown below is the demo of collection performed with four sensors attached on both sides of arms. A person in the demo is wearing two wireless IMU sensors each arm, one on the forearm and the other on the upper arm. One can click the image below to play the video.  
-<p><a href="https://youtu.be/haHzl5pTLXs" target="_blank"><img src="https://github.com/sohn21c/cp_simulator/blob/master/img/demo3.png?raw=true" width="600"></a></p>
+&nbsp;&nbsp;&nbsp;&nbsp;Shown below is the demo of collection performed with **four** sensors attached on both sides of arms. A person in the demo is wearing two wireless IMU sensors each arm, one on the forearm and the other on the upper arm. One can click the image below to play the video.  
+<p><a href="https://youtu.be/CzFDOUBPCv0" target="_blank"><img src="https://github.com/sohn21c/cp_simulator/blob/master/img/demo3.png?raw=true" width="600"></a></p>
 
 #### Upper Body 2
-&nbsp;&nbsp;&nbsp;&nbsp;Shown below is the demo of collection performed with four sensors attached on both sides of arms. A person in the demo is wearing two wireless IMU sensors each arm, one on the forearm and the other on the upper arm. One can click the image below to play the video.  
-<p><a href="https://youtu.be/C2R4Dv_Y2AU" target="_blank"><img src="https://github.com/sohn21c/cp_simulator/blob/master/img/demo4.png?raw=true" width="600"></a></p>  
+&nbsp;&nbsp;&nbsp;&nbsp;Shown below is the demo of collection performed with **four** sensors attached on both sides of arms. A person in the demo is wearing two wireless IMU sensors each arm, one on the forearm and the other on the upper arm. One can click the image below to play the video.  
+<p><a href="https://youtu.be/xG43TyQ2N0o" target="_blank"><img src="https://github.com/sohn21c/cp_simulator/blob/master/img/demo4.png?raw=true" width="600"></a></p>  
 
-#### Full Body
+#### Full Body 1
+&nbsp;&nbsp;&nbsp;&nbsp;Shown below is the demo of collection performed with **eight** sensors attached to the body. A person in the demo is wearing one sensor on each of 4 limb both sides: upper arm, forearm, thigh and shin. The subject in the demo is **walking**. One can click the image below to play the video.  
+<p><a href="https://youtu.be/y3UMktPrMk0" target="_blank"><img src="https://github.com/sohn21c/cp_simulator/blob/master/img/demo4.png?raw=true" width="600"></a></p>  
+
+#### Full Body 2
+&nbsp;&nbsp;&nbsp;&nbsp;Shown below is the demo of collection performed with **eight** sensors attached to the body. A person in the demo is wearing one sensor on each of 4 limb both sides: upper arm, forearm, thigh and shin. One can click the image below to play the video.  
+<p><a href="https://youtu.be/MWzzhqKUNmg" target="_blank"><img src="https://github.com/sohn21c/cp_simulator/blob/master/img/demo4.png?raw=true" width="600"></a></p>
 
 ## Citation
 ```
