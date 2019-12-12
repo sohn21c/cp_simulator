@@ -139,11 +139,11 @@ roslaunch cp_simulator upper_body_cp.launch
 
 #### Full Body 1
 &nbsp;&nbsp;&nbsp;&nbsp;Shown below is the demo of collection performed with **eight** sensors attached to the body. A person in the demo is wearing one sensor on each of 4 limb both sides: upper arm, forearm, thigh and shin. The subject in the demo is **walking**. One can click the image below to play the video.  
-<p><a href="https://youtu.be/y3UMktPrMk0" target="_blank"><img src="https://github.com/sohn21c/cp_simulator/blob/master/img/demo4.png?raw=true" width="600"></a></p>  
+<p><a href="https://youtu.be/y3UMktPrMk0" target="_blank"><img src="https://github.com/sohn21c/cp_simulator/blob/master/img/demo5.png?raw=true" width="600"></a></p>  
 
 #### Full Body 2
 &nbsp;&nbsp;&nbsp;&nbsp;Shown below is the demo of collection performed with **eight** sensors attached to the body. A person in the demo is wearing one sensor on each of 4 limb both sides: upper arm, forearm, thigh and shin. One can click the image below to play the video.  
-<p><a href="https://youtu.be/MWzzhqKUNmg" target="_blank"><img src="https://github.com/sohn21c/cp_simulator/blob/master/img/demo4.png?raw=true" width="600"></a></p>
+<p><a href="https://youtu.be/MWzzhqKUNmg" target="_blank"><img src="https://github.com/sohn21c/cp_simulator/blob/master/img/demo6.png?raw=true" width="600"></a></p>
 
 ## Citation
 ```
