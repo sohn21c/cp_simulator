@@ -199,14 +199,14 @@ class Transform(object):
 # main
 def main():
 	# Demofile names go here
-	filename1 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "121019_run4_ur.csv"
-	filename2 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "121019_run4_lr.csv"
-	filename3 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "121019_run4_ul.csv"
-	filename4 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "121019_run4_ll.csv"
-	filename5 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "121019_run4_tr.csv"
-	filename6 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "121019_run4_sr.csv"
-	filename7 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "121019_run4_tl.csv"
-	filename8 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "121019_run4_sl.csv"
+	filename1 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "111019_run7_ur.csv"
+	filename2 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "111019_run7_lr.csv"
+	filename3 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "111019_run7_ul.csv"
+	filename4 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "111019_run7_ll.csv"
+	# filename5 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "111019_run7_tr.csv"
+	# filename6 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "111019_run7_sr.csv"
+	# filename7 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "111019_run7_tl.csv"
+	# filename8 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "111019_run7_sl.csv"
 	
 	# Successful demo
 	# filename1 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "111019_run7_ur.csv"
@@ -219,10 +219,13 @@ def main():
 	# filename8 = "/home/james/catkin_ws/src/cp_simulator/demo/" + "111019_run7_ll.csv"
 
 	# instantiate the Transform class	
-	transform = Transform(num_sensors=8)
-	transform.get_pose(filename1, filename2, filename3, filename4, filename5, filename6, filename7, filename8)
-	transform.tf_broadcast()
+	# transform = Transform(num_sensors=8)
+	# transform.get_pose(filename1, filename2, filename3, filename4, filename5, filename6, filename7, filename8)
+	# transform.tf_broadcast()
 	
+	transform = Transform(num_sensors=4)
+	transform.get_pose(filename1, filename2, filename3, filename4)
+	transform.tf_broadcast()
 	rospy.spin()
 
 if __name__ == '__main__':

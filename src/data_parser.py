@@ -151,7 +151,7 @@ def data_parser2(filename, sensor, start, end):
 	plt.plot(time, gyro_x, 'r', label='x')
 	plt.plot(time, gyro_y, 'g', label='y')
 	plt.plot(time, gyro_z, 'b', label='z')
-	plt.title(f'{filename.split('/')[-1]} Gyro vs Time')
+	plt.title(f"{filename.split('/')[-1]} Gyro vs Time")
 	plt.show()
 
 	return acc_x, acc_y, acc_z, gyro_x, gyro_y, gyro_z
