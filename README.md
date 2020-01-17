@@ -156,3 +156,7 @@ roslaunch cp_simulator upper_body_cp.launch
     url          = {https://github.com/sohn21c/cp_simulator/}
     }
 ```
+
+https://github.com/sohn21c/cp_simulator/commit/9dcffaddcb5dd190b6e94b8a949fd3caf547820a
+
+[commit here](https://github.com/sohn21c/cp_simulator/commit/9dcffaddcb5dd190b6e94b8a949fd3caf547820a)
