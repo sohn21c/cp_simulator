@@ -1,5 +1,6 @@
 # Human Motion Simulator with Wearable IMU Sensor
-[![DOI](https://zenodo.org/badge/185318740.svg)](https://zenodo.org/badge/latestdoi/185318740)  
+<a href="https://doi.org/10.5281/zenodo.3690141"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.3690141.svg" alt="DOI"></a>
+
 #### _[James Sohn(Click to see the portfolio)](https://sohn21c.github.io)_  
   
 ## Objective  
