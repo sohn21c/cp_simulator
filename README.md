@@ -70,26 +70,23 @@ root: ~/catkin_ws/src/cp_simulator/
 
 #### Algorithm  
 ```
-From initial measurement of sensor and gravity represented in world frame({w}) (0, 0, -|gravity|), get RR(rotation mat).  
-Sensor coordinate({b}) in world frame <- RR(dot)Identity matrix  
+From initial sensor acceleration in sensor frame({b}) and gravity represented in world frame({w}) (0, 0, -|gravity|), get RR(rotation mat).   
+Sensor frame {b}(sensor coordinate) in {w} <- RR(dot)Identity matrix  
   
 While not done:  
 
-	sensor acceleration in {w} <- RR(dot)sensor acceleration in {b}  
-	sensor acceleration in {w} -= gravity  
-	velocity in {w} = sensor acceleration in {w} * T  
-	position in {w} = velocity in {w} * T  
 	rotation of frame = Single Orthogonal Rotation Angle(ang velocity)  
 	updated sensor coordinate = sensor coordinate(dot)rotation of frame  
 	updated RR = RR(dot)rotation of frame  
-	get quaternion from so3  
-
-return position in {w}, quaternion   
+	get quaternion from so3(RR)  
+	broadcast sensor coordinate in {w}, in quaternion
+	sensor position updated by (sensor coordinate, model physical constraint)
+	
 ```
 #### Execution Sequence
 1. Run `python computation.py` with tab-spaced-value files containing 6 columns of linear acc and ang vel.  
 2. ROS launch `roslaunch cp_simulator upper_body_cp.launch` to initiate the RViz simulator  
-Refer to [Demo](#demo) to walk through the launch of demo files.  
+Refer to [Demo Section](#demo) to walk through the launch of demo files.  
 
 ## Challenge  
 &nbsp;&nbsp;&nbsp;&nbsp;During the development of the software, a number of technical challenges were encountered and addressed.  
