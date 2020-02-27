@@ -1,4 +1,5 @@
 # Human Motion Simulator with Wearable IMU Sensor
+[![DOI](https://zenodo.org/badge/185318740.svg)](https://zenodo.org/badge/latestdoi/185318740)  
 #### _[James Sohn(Click to see the portfolio)](https://sohn21c.github.io)_  
   
 ## Objective  
@@ -149,8 +150,10 @@ roslaunch cp_simulator upper_body_cp.launch
     title        = {{Human Motion Simulator with Wearable IMU Sensor}},
     month        = dec,
     year         = 2019,
-    version      = {1.0},
-    url          = {https://github.com/sohn21c/cp_simulator/}
+    doi          = {10.5281/zenodo.3690141},  
+    version      = {1.0.0},
+    publisher	 = {Zenodo},
+    url          = {https://doi.org/10.5281/zenodo.3690141}
     }
 ```
 
